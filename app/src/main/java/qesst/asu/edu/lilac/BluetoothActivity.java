@@ -121,7 +121,7 @@ public class BluetoothActivity extends Activity
 
 	public boolean isConnected()
 	{
-		return mBluetoothSocket.isConnected();
+		return mBluetoothSocket != null && mBluetoothSocket.isConnected();
 	}
 
 	public void write(String message)
