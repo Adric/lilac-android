@@ -75,7 +75,7 @@ public class MessageData
 				continue;
 			}
 
-			dataEntries.add(new ModuleDataEntry(EMeasurementType.toType(type.charAt(0)), value));
+			dataEntries.add(new ModuleDataEntry(EFlag.toType(type.charAt(0)), value));
 		}
 		return dataEntries;
 	}

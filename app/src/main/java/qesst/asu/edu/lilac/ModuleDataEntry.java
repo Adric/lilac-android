@@ -19,7 +19,7 @@ public class ModuleDataEntry
 		mTemp = null;
 	}
 
-	public ModuleDataEntry(EMeasurementType type, double data)
+	public ModuleDataEntry(EFlag type, double data)
 	{
 		mVoltage = null;
 		mCurrent = null;

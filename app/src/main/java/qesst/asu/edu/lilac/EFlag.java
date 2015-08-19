@@ -3,7 +3,7 @@ package qesst.asu.edu.lilac;
 /**
  * Enum for each measurement type
  */
-public enum EMeasurementType
+public enum EFlag
 {
 	NONE(0),
 	VOLTAGE(1),
@@ -21,39 +21,39 @@ public enum EMeasurementType
 
 	private int val = 0;
 
-	private EMeasurementType(int val)
+	private EFlag(int val)
 	{
 		this.val = val;
 	}
 
-	public static EMeasurementType toType(char ch)
+	public static EFlag toType(char ch)
 	{
 		switch (ch)
 		{
 			case 'V':
-				return EMeasurementType.VOLTAGE;
+				return EFlag.VOLTAGE;
 			case 'I':
-				return EMeasurementType.CURRENT;
+				return EFlag.CURRENT;
 			case 'T':
-				return EMeasurementType.TEMP;
+				return EFlag.TEMP;
 			case 'C':
-				return EMeasurementType.CURRENT;
+				return EFlag.CURRENT;
 			case 'A':
-				return EMeasurementType.AVERAGE;
+				return EFlag.AVERAGE;
 			case 'W':
-				return EMeasurementType.SWEEP;
+				return EFlag.SWEEP;
 			case 'D':
-				return EMeasurementType.DEBUG_OUTPUT;
+				return EFlag.DEBUG_OUTPUT;
 			case 'B':
-				return EMeasurementType.BEGIN;
+				return EFlag.BEGIN;
 			case 'E':
-				return EMeasurementType.END;
+				return EFlag.END;
 			case '!':
-				return EMeasurementType.ERROR;
+				return EFlag.ERROR;
 			case 'F':
-				return EMeasurementType.FLAGS;
+				return EFlag.FLAGS;
 			default:
-				return EMeasurementType.NONE;
+				return EFlag.NONE;
 		}
 	}
 

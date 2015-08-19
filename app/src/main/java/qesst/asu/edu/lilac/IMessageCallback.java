@@ -3,7 +3,7 @@ package qesst.asu.edu.lilac;
 import java.util.ArrayList;
 
 /**
- * Callback for sending messages back to the main activity
+ * Callback for sending messages back to an activity
  */
 public interface IMessageCallback
 {

@@ -51,7 +51,7 @@ public class ModuleDataSet
 		mModuleDataEntries.remove(moduleData);
 	}
 
-	public void remove(double value, EMeasurementType type)
+	public void remove(double value, EFlag type)
 	{
 		search: for (ModuleDataEntry entry : mModuleDataEntries)
 		{
@@ -99,7 +99,7 @@ public class ModuleDataSet
 		return mModuleDataEntries.get(index);
 	}
 
-	double getStdev(EMeasurementType type)
+	double getStdev(EFlag type)
 	{
 		// Get the mean
 		double mean = getMean(type);
@@ -147,7 +147,7 @@ public class ModuleDataSet
 		return Math.sqrt(variance);
 	}
 
-	double getMean(EMeasurementType type)
+	double getMean(EFlag type)
 	{
 		int count = 0;
 		double sum = 0;
@@ -185,7 +185,7 @@ public class ModuleDataSet
 		return (sum/count);
 	}
 
-	public ArrayList<Double> getData(EMeasurementType type)
+	public ArrayList<Double> getData(EFlag type)
 	{
 		ArrayList<Double> data = new ArrayList<Double>();
 		for (ModuleDataEntry entry : mModuleDataEntries)
@@ -217,7 +217,7 @@ public class ModuleDataSet
 		return data;
 	}
 
-	public Entry getEntry(int index, EMeasurementType type)
+	public Entry getEntry(int index, EFlag type)
 	{
 		try
 		{
@@ -255,7 +255,7 @@ public class ModuleDataSet
 		return null;
 	}
 
-	public ArrayList<Entry> getEntries(EMeasurementType type)
+	public ArrayList<Entry> getEntries(EFlag type)
 	{
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 
@@ -293,7 +293,7 @@ public class ModuleDataSet
 		return entries;
 	}
 
-	public ArrayList<String> getStrings(EMeasurementType type)
+	public ArrayList<String> getStrings(EFlag type)
 	{
 		ArrayList<String> strings = new ArrayList<String>();
 
