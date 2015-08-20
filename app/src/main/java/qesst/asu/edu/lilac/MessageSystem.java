@@ -148,6 +148,16 @@ public class MessageSystem extends Thread
 	 */
 	public void run()
 	{
+		// Pause this thread so that UI thread get some time to breathe.
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+
 		if (mHandler == null)
 		{
 			Log.d(TAG, "\tCalling run() with null Handler!");
