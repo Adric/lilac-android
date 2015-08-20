@@ -330,12 +330,12 @@ public class BluetoothActivity extends Activity
 		{
 			if (mParentActivity != null)
 			{
-				mMessageSystem = new MessageSystem(this, mBluetoothSocket);
+				mMessageSystem = new MessageSystem(mParentActivity, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else if (mParentFragment != null)
 			{
-				mMessageSystem = new MessageSystem(this, mBluetoothSocket);
+				mMessageSystem = new MessageSystem(mParentFragment, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else

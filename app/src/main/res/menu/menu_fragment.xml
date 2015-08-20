@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/menu_item_voltage"
+	      android:checkable="true"
+	      android:checked="true"
+	      android:title="@string/voltage" />
+	<item android:id="@+id/menu_item_current"
+	      android:checkable="true"
+	      android:checked="true"
+	      android:title="@string/current" />
+	<item android:id="@+id/menu_item_temp"
+	      android:checkable="true"
+	      android:checked="false"
+	      android:title="@string/temperature" />
+	<item android:id="@+id/menu_item_debug"
+	      android:checkable="true"
+	      android:checked="false"
+	      android:title="@string/debug" />
+	<item android:id="@+id/menu_item_sweep"
+	      android:checkable="true"
+	      android:checked="false"
+	      android:title="@string/sweep" />
+	<item android:id="@+id/menu_item_continuous"
+	      android:checkable="true"
+	      android:checked="false"
+	      android:title="@string/continuous" />
+	<item android:id="@+id/menu_item_average"
+	      android:checkable="true"
+	      android:checked="false"
+	      android:title="@string/average" />
+</menu>
