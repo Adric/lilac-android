@@ -144,5 +144,15 @@ public class ModuleDataEntry
 	{
 		mTemp = new ModuleData(temp);
 	}
+
+	@Override
+	public String toString()
+	{
+		String str = "";
+		if (hasVoltage())   str += "voltage: " + getVoltage() + " ";
+		if (hasCurrent())   str += "current: " + getCurrent() + " ";
+		if (hasTemp())      str += "temperature: " + getTemp() + " ";
+		return str;
+	}
 }
 

@@ -91,15 +91,27 @@ public class MessageSystem extends Thread
 						byte[] buffer = (byte[]) msg.obj;
 						String message = new String(buffer, 0, msg.arg1);
 						// Fix any formatting errors
-						message.trim();
+						//message.trim();
 						// Remove any Windows-only linefeeds before appending
-						message = message.replace( Character.toString('\r'), "");
+						//message = message.replace(Character.toString('\r'), "");
 						mStringBuilder.append(message);
 
+						// Strip out any leading newlines
+						while (mStringBuilder.indexOf("\n") == 0 || mStringBuilder.indexOf("\r") == 0)
+						{
+							Log.d(TAG, "Deleting EOL char at index 0");
+							Log.d(TAG, "Old mStringBuilder: " + mStringBuilder);
+							mStringBuilder.delete(0, 1);
+							Log.d(TAG, "New mStringBuilder: " + mStringBuilder);
+						}
+
 						// Find the end of line
-						int eol = mStringBuilder.indexOf(Character.toString('\n'));
+						//int eol = mStringBuilder.indexOf(Character.toString('\n'));
+						int eol = mStringBuilder.indexOf("\n");
+						Log.d(TAG, "EOL index: " + eol);
 						while (eol > 0)
 						{
+							Log.d(TAG, "EOL found at index: " + eol);
 							// If reached end of line, extract the string
 							String str = mStringBuilder.substring(0, eol);
 							//mStringBuilder.delete(0, mStringBuilder.length());
@@ -110,8 +122,10 @@ public class MessageSystem extends Thread
 							ArrayList arr = new ArrayList<String>();
 							arr.add(str);
 							mActivityCallback.call(arr);
+							arr = null;
 
-							eol = mStringBuilder.indexOf(Character.toString('\n'));
+							//eol = mStringBuilder.indexOf(Character.toString('\n'));
+							eol = mStringBuilder.indexOf("\n");
 						}
 						Log.d(TAG, "\tReceived: " + mStringBuilder.toString() + ", byte count:" + msg.arg1);
 						break;

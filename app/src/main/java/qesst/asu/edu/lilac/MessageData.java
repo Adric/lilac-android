@@ -10,15 +10,45 @@ import java.util.ArrayList;
 public class MessageData
 {
 	private final static String TAG = "MessageData";
+	private static StringBuffer mBuffer = new StringBuffer("");
 
 	public static ArrayList<ModuleDataEntry> stringToModuleData(String data)
 	{
+		// Keep appending string data to the buffer until we get a terminating char
+		mBuffer.append(data);
+		int terminatingIndex = data.indexOf('L');
+		if (terminatingIndex == -1)
+		{
+			Log.d(TAG, "Terminating index not found. Current buffer: \"" + mBuffer + "\"");
+			return null;
+		}
+		else
+		{
+			Log.d(TAG, "Terminating index found in data: \"" + data + "\"");
+		}
+
+		// We have a terminating char sent, get the buffer's index
+		terminatingIndex = mBuffer.indexOf("L");
+		Log.d(TAG, "Terminating index: " + terminatingIndex);
+
+		String dataLine = mBuffer.substring(terminatingIndex).trim();
+		Log.d(TAG, "dataLine: \"" + dataLine + "\"");
+
+		// Clear out the old data
+		Log.d(TAG, "Old buffer: \"" + mBuffer + "\"");
+		mBuffer.delete(0, terminatingIndex + 1);
+		Log.d(TAG, "New buffer: \"" + mBuffer + "\"");
+
+		// Create the array list
 		ArrayList<ModuleDataEntry> dataEntries = new ArrayList<ModuleDataEntry>();
-		data = data.trim();
-		String[] entries = data.split("\\s+"); // are these spaces or tabs?
+
+		// Parse our data based on whitespace
+		String[] entries = mBuffer.toString().trim().split("\\s+");
 		for (int i = 0; i < entries.length; ++i)
 		{
-			Log.e(TAG, "Received entry #" + i + ": " + entries[i]);
+			Log.d(TAG, "Received entry #" + i + ": " + entries[i]);
+
+			// If we have a flag, make sure the menu reflects this
 		}
 		/*
 		 Data should look like this (three parts):
@@ -64,19 +94,23 @@ public class MessageData
 			// If the value's length doesn't match what we expect, discard
 			try
 			{
-				if (Integer.valueOf(entries[i + 2]) != entries[i + 1].length())
+				// Check for length mismatch
+				if (entries[i+1].length() != Integer.valueOf(entries[i+2]))
 				{
 					throw new Exception();
 				}
 			}
 			catch(Exception e)
 			{
-				Log.e(TAG, "Invalid data length (mismatch). Expected " + entries[i+2] + " but " + entries[i+3] + " has a different length!");
+				Log.e(TAG, "Invalid data length (mismatch). Expected " + entries[i+2] + " but " + entries[i+1] + " has a different length!");
 				continue;
 			}
 
-			dataEntries.add(new ModuleDataEntry(EFlag.toType(type.charAt(0)), value));
+			ModuleDataEntry mde = new ModuleDataEntry(EFlag.toType(type.charAt(0)), value);
+			Log.d(TAG, "New ModuleDataEntry created: " + mde.toString());
+			dataEntries.add(mde);
 		}
+
 		return dataEntries;
 	}
 

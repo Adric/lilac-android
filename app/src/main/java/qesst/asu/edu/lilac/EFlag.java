@@ -57,6 +57,25 @@ public enum EFlag
 		}
 	}
 
+	/**
+	 * Returns the first flag in a string. If no flag is found, returns NONE
+	 */
+	public static EFlag getFirstFlag(String str)
+	{
+		if (str != null && !str.isEmpty())
+		{
+			for (int i = 0; i < str.length(); ++i)
+			{
+				EFlag flag = toType(str.charAt(i));
+				if (flag != EFlag.NONE)
+				{
+					return flag;
+				}
+			}
+		}
+		return EFlag.NONE;
+	}
+
 	public char toChar()
 	{
 		switch (val)
