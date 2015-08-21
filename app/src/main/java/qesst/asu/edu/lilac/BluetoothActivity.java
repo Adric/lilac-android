@@ -43,7 +43,7 @@ public class BluetoothActivity extends Activity
 	//private boolean mBTConnected;
 
 	// Threaded message system
-	private MessageSystem mMessageSystem = null;
+	private MessageSystem3 mMessageSystem = null;
 
 	public BluetoothActivity(Activity activity)
 	{
@@ -330,12 +330,12 @@ public class BluetoothActivity extends Activity
 		{
 			if (mParentActivity != null)
 			{
-				mMessageSystem = new MessageSystem(mParentActivity, mBluetoothSocket);
+				mMessageSystem = new MessageSystem3(mParentActivity, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else if (mParentFragment != null)
 			{
-				mMessageSystem = new MessageSystem(mParentFragment, mBluetoothSocket);
+				mMessageSystem = new MessageSystem3(mParentFragment, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else
