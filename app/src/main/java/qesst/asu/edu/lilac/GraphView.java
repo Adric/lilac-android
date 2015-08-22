@@ -76,11 +76,15 @@ public class GraphView
 
 		XAxis xAxis = mChart.getXAxis();
 		xAxis.setDrawGridLines(true);
+		mChart.setDoubleTapToZoomEnabled(true);
+		mChart.enableScroll(); // needed?
+		mChart.setExtraBottomOffset(5.f);
+		mChart.setExtraTopOffset(5.f);
 
 		// Add empty data point so we can add more later
 		LineData data = new LineData();
 		data.setValueTextColor(Color.WHITE);
-		data.setValueFormatter(new IVFormatter());
+		//data.setValueFormatter(new IVFormatter());
 		mChart.setData(data);
 	}
 	
@@ -142,6 +146,7 @@ public class GraphView
 			//if (mVoc < entry.getVoltage()) mVoc = (float)entry.getVoltage();
 
 			data.addXValue(Double.toString(entry.getVoltage()));
+			Log.d(TAG, "Adding values: (" + Double.toString(entry.getVoltage()) + ", " + entry.getCurrent() + ")");
 
 			data.addEntry(new Entry((float)entry.getCurrent(), set.getEntryCount()), 0);
 
@@ -149,15 +154,17 @@ public class GraphView
 			mChart.notifyDataSetChanged();
 
 			// limit the number of visible entries
-			mChart.setVisibleXRangeMaximum(120);
+			//mChart.setVisibleXRangeMaximum(120);
 			// mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
 			// move to the latest entry
-			mChart.moveViewToX(data.getXValCount() - 121);
+			mChart.moveViewToX(data.getXValCount()/* - 121*/);
 
 			// this automatically refreshes the chart (calls invalidate())
 			// mChart.moveViewTo(data.getXValCount()-7, 55f,
 			// AxisDependency.LEFT);
+
+			//mChart.invalidate();
 		}
 	}
 

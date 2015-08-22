@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:id="@+id/menu_item_voltage"
 	      android:checkable="true"
-	      android:checked="true"
+	      android:checked="false"
 	      android:title="@string/voltage" />
 	<item android:id="@+id/menu_item_current"
 	      android:checkable="true"
-	      android:checked="true"
+	      android:checked="false"
 	      android:title="@string/current" />
 	<item android:id="@+id/menu_item_temp"
 	      android:checkable="true"

@@ -215,7 +215,8 @@ public class MessageSystem3 extends Thread
 	{
 		Log.d(TAG, "\tWriting: " + message);
 		// Convert into a buffer to write to the output stream
-		byte[] buffer = (message + '\0' + '\n').getBytes();
+		// Need the newline so the arduino knows when the end of the input is
+		byte[] buffer = (message /*+ '\0'*/ + '\n').getBytes();
 		try
 		{
 			mOutputStream.write(buffer);

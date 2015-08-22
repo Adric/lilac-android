@@ -11,12 +11,14 @@ public class ModuleDataEntry
 	private ModuleData mVoltage;
 	private ModuleData mCurrent;
 	private ModuleData mTemp;
+	private long mTime;
 
 	public ModuleDataEntry()
 	{
 		mVoltage = null;
 		mCurrent = null;
 		mTemp = null;
+		mTime = 0;
 	}
 
 	public ModuleDataEntry(EFlag type, double data)
@@ -24,6 +26,7 @@ public class ModuleDataEntry
 		mVoltage = null;
 		mCurrent = null;
 		mTemp = null;
+		mTime = 0;
 		switch(type)
 		{
 			case VOLTAGE:
@@ -45,6 +48,7 @@ public class ModuleDataEntry
 		mVoltage = voltage;
 		mCurrent = null;
 		mTemp = null;
+		mTime = 0;
 	}
 
 	public ModuleDataEntry(ModuleData voltage, ModuleData current)
@@ -52,6 +56,7 @@ public class ModuleDataEntry
 		mVoltage = voltage;
 		mCurrent = current;
 		mTemp = null;
+		mTime = 0;
 	}
 
 	public ModuleDataEntry(ModuleData voltage, ModuleData current, ModuleData temp)
@@ -59,6 +64,7 @@ public class ModuleDataEntry
 		mVoltage = voltage;
 		mCurrent = current;
 		mTemp = temp;
+		mTime = 0;
 	}
 
 	public ModuleDataEntry(double voltage)
@@ -66,6 +72,7 @@ public class ModuleDataEntry
 		mVoltage = new ModuleData(voltage);
 		mCurrent = null;
 		mTemp = null;
+		mTime = 0;
 	}
 
 	public ModuleDataEntry(double voltage, double current)
@@ -73,6 +80,17 @@ public class ModuleDataEntry
 		mVoltage = new ModuleData(voltage);
 		mCurrent = new ModuleData(current);
 		mTemp = null;
+		mTime = 0;
+	}
+
+	public long getTime()
+	{
+		return mTime;
+	}
+
+	public void setTime(long mTime)
+	{
+		this.mTime = mTime;
 	}
 
 	public ModuleDataEntry(double voltage, double current, double temp)
@@ -80,6 +98,12 @@ public class ModuleDataEntry
 		mVoltage = new ModuleData(voltage);
 		mCurrent = new ModuleData(current);
 		mTemp = new ModuleData(temp);
+		mTime = 0;
+	}
+
+	public boolean hasTime()
+	{
+		return mTime != 0;
 	}
 
 	public boolean hasVoltage()
@@ -149,6 +173,7 @@ public class ModuleDataEntry
 	public String toString()
 	{
 		String str = "";
+		if (hasTime())      str += "time: "    + getTime() + " ";
 		if (hasVoltage())   str += "voltage: " + getVoltage() + " ";
 		if (hasCurrent())   str += "current: " + getCurrent() + " ";
 		if (hasTemp())      str += "temperature: " + getTemp() + " ";
