@@ -155,6 +155,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		lblVoc = (TextView) view.findViewById(R.id.lbl_voc);
 		lblIsc = (TextView) view.findViewById(R.id.lbl_isc);
 
+		btnMeasure.setEnabled(false);
+
 		lblVoc.setText("");
 		lblIsc.setText("");
 
@@ -188,6 +190,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						//txtReceived.append("Sending flags: " + flag_str);
 						mBluetooth.write(flag_str);
 						mFlags.remove(EFlag.GET_FLAGS);
+
+						// TODO: make this less fragile!
+						btnMeasure.setEnabled(true);
+						btnMeasure.setText(getResources().getString(R.string.begin_measurement));
 					}
 				}
 				else
@@ -197,6 +203,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					disconnect();
 					toggleBTUI(!mDataSet.isEmpty());
 					btnConnect.setText("Connect");
+
+					// TODO: make this less fragile!
+					btnMeasure.setEnabled(false);
+					btnMeasure.setText(getResources().getString(R.string.begin_measurement));
 				}
 			}
 		});
