@@ -23,9 +23,9 @@
 	<string name="pref_custom_mac_hint">Enter MAC address</string>
 
 	<string name="pref_file_title">File</string>
-	<string name="pref_file_data_separator_title">Select the separator for file data</string>
+	<string name="pref_file_data_separator_title">Select File Data Separator</string>
 	<string name="pref_file_data_separator_default">Tab Value</string>
-	<string name="pref_email_data_separator_title">Select the separator for email data</string>
+	<string name="pref_email_data_separator_title">Select Email Data Separator</string>
 	<string name="pref_email_data_separator_default">Comma Value</string>
 	<string name="pref_auto_save_files_check">Automatically Save Data</string>
 	<string name="pref_auto_save_files_check_summary">Automatically saves graphs and data files after measurement</string>

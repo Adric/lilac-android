@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.app.FragmentTransaction;
+//import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,6 +35,15 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		/*
+		Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_iv);
+
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction transaction = fm.beginTransaction();
+		transaction.replace(R.id.content_fragment, fragment);
+		transaction.commit();
+		*/
 	}
 
 
@@ -57,9 +70,22 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 			//startActivityForResult(i, 1);
 
 			// Display the fragment as the main content.
+			/*
 			getFragmentManager().beginTransaction()
-			                    .replace(android.R.id.content, new SettingsFragment())
+			                    .replace(R.id.content_fragment, new SettingsFragment())
 			                    .commit();
+			*/
+
+			FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+			// Replace whatever is in the fragment_container view with this fragment,
+			// and add the transaction to the back stack so the user can navigate back
+			transaction.replace(R.id.content_fragment, new SettingsFragment());
+			transaction.addToBackStack(null);
+
+			// Commit the transaction
+			transaction.commit();
+
 
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 

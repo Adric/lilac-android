@@ -1,23 +1,10 @@
 package qesst.asu.edu.lilac;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,36 +16,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.ValueFormatter;
 
 import org.json.JSONObject;
 
 
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Method;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
 
 
 /**
@@ -127,7 +100,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_main, container, false);
+		View view = inflater.inflate(R.layout.fragment_iv_main, container, false);
 
 		// Set up the UI
 		btnConnect = (Button) view.findViewById(R.id.btn_connect);
@@ -488,7 +461,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		inflater.inflate(R.menu.menu_fragment, menu);
+		inflater.inflate(R.menu.menu_fragment_iv, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 
 		for (int i = 0; i < menu.size(); ++i)
