@@ -37,6 +37,9 @@ public interface Constants
 
 	// App tag
     public static final String APP_NAME = "Lilac";
+
+    public static final String BUNDLE_ID = "edu.asu.qesst.lilac";
+
     // SPP UUID service
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     // Default bluetooth device name. Should be "DogBlue" but use all lowercase just in, well... case

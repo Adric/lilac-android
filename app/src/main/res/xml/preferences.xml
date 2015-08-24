@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory
+		android:title="@string/pref_connection_title"
+		android:key="pref_key_connection_settings">
+		<CheckBoxPreference
+			android:key="pref_custom_name_check"
+		    android:title="@string/pref_custom_name_check"
+		    android:summary="@string/pref_custom_name_summary"
+			android:defaultValue="false" />
+		<EditTextPreference
+			android:dependency="pref_custom_name_check"
+			android:key="pref_custom_name_string"
+			android:hint="@string/pref_custom_name_hint"
+		    android:maxLines="1"
+		    android:defaultValue="" />
+		<CheckBoxPreference
+			android:key="pref_custom_mac_check"
+			android:title="@string/pref_custom_mac_check"
+			android:summary="@string/pref_custom_mac_summary"
+			android:defaultValue="false" />
+		<EditTextPreference
+			android:dependency="pref_custom_mac_check"
+			android:key="pref_custom_mac_string"
+			android:hint="@string/pref_custom_mac_hint"
+			android:maxLines="1"
+			android:defaultValue="" />
+	</PreferenceCategory>
+</PreferenceScreen>
