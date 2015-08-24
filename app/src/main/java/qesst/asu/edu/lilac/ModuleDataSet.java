@@ -328,6 +328,39 @@ public class ModuleDataSet
 		return strings;
 	}
 
+	/*
+	 * Returns everything as an array of tab-separated strings
+	 */
+	public ArrayList<String> getTabbedStrings()
+	{
+		ArrayList<String> strings = new ArrayList<String>();
+
+		// TODO: make this modular to the data set
+		strings.add("TIME\tVOLTAGE\tCURRENT\tTEMPERATURE\n");
+		for (ModuleDataEntry entry : mModuleDataEntries)
+		{
+			String str = "";
+			if (entry.hasTime())    str += Long.toString(entry.getTime());
+			str += "\t";
+
+			if (entry.hasVoltage()) str += Double.toString(entry.getVoltage());
+			str += "\t";
+
+			if (entry.hasCurrent()) str += Double.toString(entry.getCurrent());
+			str += "\t";
+
+			if (entry.hasTemp())    str += Double.toString(entry.getTemp());
+
+			if (str.trim().isEmpty())
+			{
+				continue;
+			}
+			strings.add(str);
+		}
+
+		return strings;
+	}
+
 	public boolean isEmpty()
 	{
 		return mModuleDataEntries.isEmpty();

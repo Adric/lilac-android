@@ -315,7 +315,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						bw.close();*/
 
 						FileOutputStream out = new FileOutputStream(file + File.separator + filename);
-						out.write(text.getBytes());
+						ArrayList<String> data = mDataSet.getTabbedStrings();
+						for (String s : data)
+						{
+							out.write((s + "\n").getBytes());
+						}
+						//out.write(text.getBytes());
 						out.close();
 						Log.e(TAG, filename + " written");
 						Toast.makeText(getActivity(), filename + " saved successfully!",
