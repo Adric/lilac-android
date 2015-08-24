@@ -265,7 +265,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				// Create filename
 				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
 
-				// TODO: add prefences to check for local enum between .txt and .csv
+				// TODO: add preferences to check for local enum between .txt and .csv
 				String filename = "IV-data-" + df.format(new Date()) + ".txt";
 
 				// Try to write to SDcard
