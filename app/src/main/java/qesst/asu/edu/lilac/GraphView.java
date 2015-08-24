@@ -184,4 +184,9 @@ public class GraphView
 		set.setDrawValues(false);
 		return set;
 	}
+
+	public boolean saveToGallery(String fileName, int quality)
+	{
+		return mChart.saveToGallery(fileName, quality);
+	}
 }
