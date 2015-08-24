@@ -244,6 +244,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			public void onClick(View v)
 			{
 				txtReceived.setText("");
+				mGraph.reset();
 			}
 		});
 

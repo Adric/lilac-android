@@ -189,4 +189,10 @@ public class GraphView
 	{
 		return mChart.saveToGallery(fileName, quality);
 	}
+
+	public void reset()
+	{
+		init();
+		mChart.invalidate();
+	}
 }
