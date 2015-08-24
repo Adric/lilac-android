@@ -12,6 +12,7 @@
 			android:dependency="pref_custom_name_check"
 			android:key="pref_custom_name_string"
 			android:hint="@string/pref_custom_name_hint"
+			android:summary="@string/pref_custom_name_hint"
 		    android:maxLines="1"
 		    android:defaultValue="" />
 		<CheckBoxPreference
@@ -23,6 +24,7 @@
 			android:dependency="pref_custom_mac_check"
 			android:key="pref_custom_mac_string"
 			android:hint="@string/pref_custom_mac_hint"
+			android:summary="@string/pref_custom_mac_hint"
 			android:maxLines="1"
 			android:defaultValue="" />
 	</PreferenceCategory>
