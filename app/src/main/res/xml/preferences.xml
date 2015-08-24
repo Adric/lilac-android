@@ -43,5 +43,10 @@
 			android:entries="@array/pref_email_data_separator_entries"
 			android:entryValues="@array/pref_email_data_separator_values"
 			android:defaultValue="@string/pref_email_data_separator_default"/>
+		<CheckBoxPreference
+			android:key="pref_auto_save_files_check"
+			android:title="@string/pref_auto_save_files_check"
+			android:summary="@string/pref_auto_save_files_check_summary"
+			android:defaultValue="false" />
 	</PreferenceCategory>
 </PreferenceScreen>
