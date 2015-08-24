@@ -68,13 +68,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 {
 	private final static String TAG = "MainActivityFragment";
 
-	//private View mView;
-
 	private boolean mUseDummyData = false;
-
-	private boolean mEndMeasurement = false;
-
-	private int mSingleEntryIndex;
 
 	private boolean mMeasuring;
 
@@ -103,7 +97,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private Button btnFlags = null;
 	private TextView lblVoc = null;
 	private TextView lblIsc = null;
-	private Menu mMenu = null;
 	private Button btnWriteToFile = null;
 	private Button btnEmail = null;
 	private Button btnScreenshot = null;
@@ -117,7 +110,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mBluetooth = new BluetoothActivity(this);
 		mFilenames = new ArrayList<String>();
 		mDataSet = new ModuleDataSet();
-		mSingleEntryIndex = 0;
 		mVoc = 0.f;
 		mCallCount = 0;
 		mFlags = EnumSet.noneOf(EFlag.class);
@@ -134,21 +126,13 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	                         Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-		//mView = view;
 
-		// set up the buttons
-		//btnVoltage = (Button) view.findViewById(R.id.btn_voltage);
-		//btnCurrent = (Button) view.findViewById(R.id.btn_current);
-		//btnSweep = (Button) view.findViewById(R.id.btn_sweep);
+		// Set up the UI
 		btnConnect = (Button) view.findViewById(R.id.btn_connect);
 		btnWriteToFile = (Button) view.findViewById(R.id.btn_to_file);
 		btnEmail = (Button) view.findViewById(R.id.btn_email);
 		btnScreenshot = (Button) view.findViewById(R.id.btn_screenshot);
-		//btnAverage = (Button) view.findViewById(R.id.btn_average);
-		//btnDebug = (Button) view.findViewById(R.id.btn_debug_output);
 		btnMeasure = (Button) view.findViewById(R.id.btn_measure);
-		//btnContinuous = (Button) view.findViewById(R.id.btn_continuous);
-		//btnTemp = (Button) view.findViewById(R.id.btn_temp);
 		txtReceived = (TextView) view.findViewById(R.id.txt_received);
 		btnClear = (Button) view.findViewById(R.id.btn_clear);
 		btnFlags = (Button) view.findViewById(R.id.btn_flags);
@@ -156,7 +140,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		lblIsc = (TextView) view.findViewById(R.id.lbl_isc);
 
 		btnMeasure.setEnabled(false);
-
+		btnConnect.setText("Connect");
 		lblVoc.setText("");
 		lblIsc.setText("");
 
@@ -170,8 +154,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		txtReceived.setLongClickable(!readOnly);
 		txtReceived.setCursorVisible(!readOnly);
 
-
-		btnConnect.setText("Connect");
 
 		btnConnect.setOnClickListener(new View.OnClickListener()
 		{
@@ -264,9 +246,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			public void onClick(View v)
 			{
-				// Generate a file
-				/*String[] output = txtInfo.getText().toString().split(Character.toString('\n'));
 				String text = "";
+				String[] output = txtReceived.getText().toString().split(Character.toString('\n'));
 				for (int i = 0; i < output.length; ++i)
 				{
 					text += output[i];
@@ -275,34 +256,17 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						text += "\n";
 					}
 				}
-				*/
-
-				String text = "";
-				String[] output2 = txtReceived.getText().toString().split(Character.toString('\n'));
-				for (int i = 0; i < output2.length; ++i)
-				{
-					text += output2[i];
-					if (i < output2.length - 1)
-					{
-						text += "\n";
-					}
-				}
-
-
-				//String text = txtInfo.getText() + "\n" + txtRawData.getText();
 
 				// Create filename
 				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-				String filename = "IV-data-" + df.format(new Date()) + ".txt";
-				//String filename = "data.csv";
-				// Add it to the list
-				// TODO: build this array from the directory structure and prompt the user
-				// to select a file
 
-				// new way:
+				// TODO: add prefences to check for local enum between .txt and .csv
+				String filename = "IV-data-" + df.format(new Date()) + ".txt";
+
+				// Try to write to SDcard
 				if (canWriteOnExternalStorage())
 				{
-					// new new way
+					// TODO: move this list into a method that rebuilds it from the file directory on request
 					if (!mFilenames.contains(filename))
 					{
 						mFilenames.add(filename);
@@ -315,154 +279,65 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						return;
 					}
 
-					/*
-					if (!file.exists())
-					{
-						try
-						{
-							file.createNewFile();
-						}
-						catch (Exception eee)
-						{
-							Log.e(TAG, "File doesn't exist but can't create a new one!");
-						}
-					}*/
-
 					try
 					{
-						/*
-						FileWriter fw = new FileWriter(file.getAbsoluteFile());
-						BufferedWriter bw = new BufferedWriter(fw);
-						bw.write(text);
-						bw.close();*/
-
 						FileOutputStream out = new FileOutputStream(file + File.separator + filename);
 						ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
 						for (String s : data)
 						{
+							// Add newlines here
 							out.write((s + "\n").getBytes());
 						}
-						//out.write(text.getBytes());
 						out.close();
-						Log.e(TAG, filename + " written");
-						Toast.makeText(getActivity(), filename + " saved successfully!",
+
+						Log.d(TAG, filename + " written successfully");
+						Toast.makeText(getActivity(), filename + " saving successful!",
 						               Toast.LENGTH_SHORT).show();
 					}
 					catch (IOException e)
 					{
-						Log.e(TAG, "Could not write file: " + filename + ", trying alterate way");
+						Log.e(TAG, "Could not write file: " + filename + ", trying alternate way");
 						try
 						{
 							FileOutputStream fout = getActivity().getApplicationContext().openFileOutput(filename, Context.MODE_APPEND);
 							OutputStreamWriter osw = new OutputStreamWriter(fout);
 
 							// Write the string to the file
-							osw.write(text);
-							// ensure that everything is really written out and close
-							//osw.flush();// ensure that everything is really written out and close
+							ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
+							for (String s : data)
+							{
+								// Add newlines here
+								osw.write(s + "\n");
+							}
 							osw.close();
 						}
 						catch (IOException ioe)
 						{
 							Log.e(TAG, "OutputStreamWriter could not write " + filename);
-							//e.printStackTrace();
 							try
 							{
 								File root = new File(Environment.DIRECTORY_DOWNLOADS);
 								File gpxfile = new File(root, filename);
-								FileWriter writer2 = new FileWriter(gpxfile);
-								writer2.append(text);
-								writer2.flush();
-								writer2.close();
+								FileWriter fw = new FileWriter(gpxfile);
+								fw.append(text);
+								fw.flush();
+								fw.close();
 							}
 							catch (IOException ioe2)
 							{
 								Log.e(TAG, "FileWriter failed to write " + filename + " too!");
+								Toast.makeText(getActivity(), filename + " saving failed!",
+								               Toast.LENGTH_SHORT).show();
 							}
 						}
 					}
-
-					/*
-					// get the path to sdcard
-					File sdcard = Environment.getExternalStorageDirectory(); // to this path add a new directory path
-					File dir = new File(sdcard.getAbsolutePath() + "Lilac"); // create this directory if not already created
-					dir.mkdir();// create the file in which we will write the contents
-					File file = new File(dir, filename);
-					try
-					{
-						FileOutputStream os = new FileOutputStream(file);
-						//String data = “This is the content of my file”;
-						os.write(text.getBytes());
-						os.flush();// ensure that everything is really written out and close
-						os.close();
-					}
-					catch (IOException ioe)
-					{
-						ioe.printStackTrace();
-					}*/
 				}
 				else
 				{
 					Log.e(TAG, "Could not write to external storage!");
+					Toast.makeText(getActivity(), filename + " saving failed!",
+					               Toast.LENGTH_SHORT).show();
 				}
-
-
-				// old way
-				/*
-				if (!mFilenames.contains(filename))
-				{
-					mFilenames.add(filename);
-				}
-
-				File file = new File(getFilesDir() + File.separator + filename);
-				try
-				{
-					FileOutputStream out = new FileOutputStream(file);
-					out.write(text.getBytes());
-					out.close();
-					Log.d(TAG, "Wrote output to: " + getFilesDir() + File.separator + filename);
-				}
-				catch (IOException e)
-				{
-					Log.e(TAG, "Could not write file: " + e.getLocalizedMessage());
-				}
-
-
-				try
-				{
-					// Alternate deprecated file output
-					// TODO: add in if/else
-					/*FileOutputStream fout = openFileOutput(filename, MODE_WORLD_READABLE);
-					OutputStreamWriter osw = new OutputStreamWriter(fout);
-
-					// Write the string to the file
-					osw.write(text);
-					// ensure that everything is really written out and close
-					osw.flush();// ensure that everything is really written out and close
-					osw.flush();
-					osw.close();*/
-
-					/*Log.d(TAG, "text: " + text);
-
-					// Verify we wrote the file correctly
-					FileInputStream fin = openFileInput(filename);
-					InputStreamReader isr = new InputStreamReader(fin);
-					// Prepare a char-Array that will hold the chars we read back in
-					char[] input_buffer = new char[text.length()];
-					// Fill the Buffer with data from the file
-					isr.read(input_buffer);
-					// Transform the chars to a String
-					String input_str = new String(input_buffer);
-
-					// Check if we read back the same chars that we had written out
-					boolean is_same = text.equals(input_str);
-
-					Log.i(TAG, "Write success: " + is_same);
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}*/
 			}
 		});
 
@@ -524,7 +399,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		btnScreenshot.setOnClickListener(new View.OnClickListener()
 		{
 
-			//TODO: pass this the View of the graphing Fragment
+			//TODO: change library to use Lilac subfolder
 			public void onClick(View v)
 			{
 				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
@@ -537,112 +412,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				{
 					Toast.makeText(getActivity(), "Saving " + filename + " failed!", Toast.LENGTH_SHORT).show();
 				}
-				/*if (canWriteOnExternalStorage())
-				{
-					File file = getScreenshotDir("Lilac");
-					if (file == null)
-					{
-						Log.e(TAG, "Could not create lilac folder to write in");
-						return;
-					}
-					final View rootView = view.findViewById(android.R.id.content).getRootView();
-					rootView.setDrawingCacheEnabled(true);
-					Bitmap bitmap = rootView.getDrawingCache();
-
-					SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss");
-					String filename = "IV-data-" + df.format(new Date()) + ".png";
-					File imagePath = new File(file + File.separator + filename);
-					FileOutputStream fos;
-					try
-					{
-						fos = new FileOutputStream(imagePath);
-						bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-						fos.flush();
-						fos.close();
-						Toast.makeText(view.getBaseContext(), filename + " saved successfully!",
-						               Toast.LENGTH_SHORT).show();
-					}
-					catch (FileNotFoundException e)
-					{
-						Log.e(TAG, e.getMessage(), e);
-					}
-					catch (IOException e)
-					{
-						Log.e(TAG, e.getMessage(), e);
-					}
-					bitmap = null;
-				}
-				/*
-				// Create the bitmap
-				final Bitmap bitmap = Bitmap.createBitmap(v.getWidth(),
-				                                    v.getHeight(), Bitmap.Config.ARGB_8888);
-				final Canvas canvas = new Canvas(bitmap);
-
-				// Get current theme to know which background to use
-				final Resources.Theme theme = getTheme();
-				final TypedArray ta = theme
-						.obtainStyledAttributes(new int[] { android.R.attr.windowBackground });
-				final int res = ta.getResourceId(0, 0);
-				final Drawable background = getResources().getDrawable(res);
-
-				// Draw background
-				background.draw(canvas);
-
-				// Draw view
-				v.draw(canvas);
-
-				// Save to file
-				FileOutputStream fos = null;
-				try
-				{
-					final String screenshot_folder = getFilesDir() + File.separator;
-					final File sddir = new File(screenshot_folder);
-					final String filename = "Graph_" + System.currentTimeMillis() + ".jpg";
-					if (!sddir.exists())
-					{
-						sddir.mkdirs();
-					}
-					fos = new FileOutputStream(screenshot_folder + filename);
-					if (fos != null)
-					{
-						if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos))
-						{
-							Log.d(TAG, "Compress/Write failed");
-						}
-						else
-						{
-							Log.d(TAG, "Saved screenshot: " + screenshot_folder + filename);
-						}
-						fos.flush();
-						fos.close();
-
-						// Temporary code to open the image file for viewing:
-						Intent intent = new Intent();
-						intent.setAction(Intent.ACTION_VIEW);
-						// TODO "imagine/jpeg" for Android 2.3
-						intent.setDataAndType(Uri.parse("file://" + screenshot_folder + filename), "image/*");
-						try
-						{
-							startActivity(intent);
-						}
-						catch(ActivityNotFoundException e)
-						{
-							e.printStackTrace();
-						}
-					}
-				}
-				catch (FileNotFoundException e)
-				{
-					e.printStackTrace();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}*/
 			}
 		});
-
-
 
 		// Create the chart
 		mGraph = new GraphView((LineChart) view.findViewById(R.id.iv_curve), view);
@@ -769,7 +540,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			for (int i = 0; i < menu.size(); ++i)
 			{
 				MenuItem item = menu.getItem(i);
-				//item.setEnabled(true);
 				item.setChecked(mFlags.contains(getEFlagFromMenuItem(item)));
 			}
 		}
@@ -843,7 +613,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 			try
 			{
-				// Ugly parsing, refactor!
+				// TODO: Ugly parsing, refactor!
 				JSONObject jObj = new JSONObject(str);
 				ModuleDataEntry mde = new ModuleDataEntry();
 				boolean add = false;
@@ -926,7 +696,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				Log.d(TAG, e.getMessage());
 			}
 		}
-		//mDataSet.add(MessageData.stringToModuleData(output));
 		Log.e(TAG, output);
 
 		// Clear out what we get
