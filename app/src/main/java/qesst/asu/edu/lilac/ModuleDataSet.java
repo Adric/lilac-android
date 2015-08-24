@@ -354,30 +354,80 @@ public class ModuleDataSet
 	{
 		ArrayList<String> strings = new ArrayList<String>();
 
-		// TODO: make this modular to the data set
-		strings.add("TIME" + data_separator.get() +
-		            "VOLTAGE" + data_separator.get() +
-		            "CURRENT" + data_separator.get() +
-		            "TEMPERATURE");
+		// TODO: make this less messy
+		boolean has_time = false;
+		boolean has_voltage = false;
+		boolean has_current = false;
+		boolean has_temp = false;
 		for (ModuleDataEntry entry : mModuleDataEntries)
 		{
 			String str = "";
-			if (entry.hasTime())    str += Long.toString(entry.getTime());
+			if (entry.hasTime())
+			{
+				str += Long.toString(entry.getTime());
+				has_time = true;
+			}
 			str += data_separator.get();
 
-			if (entry.hasVoltage()) str += Double.toString(entry.getVoltage());
+			if (entry.hasVoltage())
+			{
+				str += Double.toString(entry.getVoltage());
+				has_voltage = true;
+			}
 			str += data_separator.get();
 
-			if (entry.hasCurrent()) str += Double.toString(entry.getCurrent());
+			if (entry.hasCurrent())
+			{
+				str += Double.toString(entry.getCurrent());
+				has_current = true;
+			}
 			str += data_separator.get();
 
-			if (entry.hasTemp())    str += Double.toString(entry.getTemp());
+			if (entry.hasTemp())
+			{
+				str += Double.toString(entry.getTemp());
+				has_temp = true;
+			}
 
-			if (str.trim().isEmpty())
+			if (str.charAt(0) == data_separator.get().charAt(0))
 			{
 				continue;
 			}
+			else if (!str.isEmpty() &&
+			         str.charAt(str.length()-1) == data_separator.get().charAt(0))
+			{
+				str = str.substring(0, str.length()-1);
+			}
+
 			strings.add(str);
+		}
+
+		String header = "";
+		if (has_time)
+		{
+			header += "TIME" + data_separator.get();
+		}
+		if (has_voltage)
+		{
+			header += "VOLTAGE" + data_separator.get();
+		}
+		if (has_current)
+		{
+			header += "CURRENT" + data_separator.get();
+		}
+		if (has_temp)
+		{
+			header += "TEMPERATURE" + data_separator.get();
+		}
+		if (!header.isEmpty() &&
+		    header.charAt(header.length()-1) == data_separator.get().charAt(0))
+		{
+			header = header.substring(0, header.length()-1);
+		}
+
+		if (!header.isEmpty())
+		{
+			strings.add(0, header);
 		}
 
 		return strings;
