@@ -88,6 +88,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	// List of files
 	private ArrayList<String> mFilenames;
 
+	private ArrayList<MenuItem> mFlagMenuItems;
 
 	// UI
 	private Button btnConnect = null;
@@ -113,6 +114,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mVoc = 0.f;
 		mCallCount = 0;
 		mFlags = EnumSet.noneOf(EFlag.class);
+		mFlagMenuItems = new ArrayList<MenuItem>();
 
 		// Default flags we want
 		mFlags.add(EFlag.VOLTAGE);
@@ -190,6 +192,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					btnMeasure.setEnabled(false);
 					btnMeasure.setText(getResources().getString(R.string.begin_measurement));
 				}
+
+				// Toggle menu items based on connection state
+				updateMenuItems();
 			}
 		});
 
@@ -488,10 +493,23 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		for (int i = 0; i < menu.size(); ++i)
 		{
 			MenuItem item = menu.getItem(i);
-			if (item.isCheckable())
+			switch (item.getItemId())
 			{
-				item.setEnabled(mBluetooth.isConnected());
+				case R.id.menu_item_voltage:
+				case R.id.menu_item_current:
+				case R.id.menu_item_temp:
+				case R.id.menu_item_sweep:
+				case R.id.menu_item_continuous:
+				case R.id.menu_item_average:
+				case R.id.menu_item_debug:
+					mFlagMenuItems.add(item);
+					break;
+				default:
+					continue;
 			}
+
+			// Should be disabled at the start
+			updateMenuItems();
 		}
 	}
 
@@ -531,21 +549,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu)
+	private void updateMenuItems()
 	{
-		if (menu != null && mBluetooth.isConnected())
+		for (MenuItem item : mFlagMenuItems)
 		{
-			// Update checked-ness based on flags we've received back
-			for (int i = 0; i < menu.size(); ++i)
-			{
-				MenuItem item = menu.getItem(i);
-				item.setChecked(mFlags.contains(getEFlagFromMenuItem(item)));
-			}
-		}
-		else
-		{
-			Log.d(TAG, "onPrepareOptionsMenu when not connected!");
+			item.setEnabled(mBluetooth.isConnected());
+			item.setChecked(mFlags.contains(getEFlagFromMenuItem(item)));
 		}
 	}
 
