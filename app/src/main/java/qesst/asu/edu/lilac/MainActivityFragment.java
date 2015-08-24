@@ -502,6 +502,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		String output = "";
 		for (String str : arr)
 		{
+			// Any kind of string operation here bogs down our threads
+			// Comment this out for release!
 			output += str;// + "\n";
 			txtReceived.append(output + "\n");
 
