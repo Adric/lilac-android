@@ -56,6 +56,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -269,7 +270,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				//String text = txtInfo.getText() + "\n" + txtRawData.getText();
 
 				// Create filename
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss");
+				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
 				String filename = "IV-data-" + df.format(new Date()) + ".txt";
 				//String filename = "data.csv";
 				// Add it to the list
@@ -486,7 +487,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			//TODO: pass this the View of the graphing Fragment
 			public void onClick(View v)
 			{
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss");
+				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
 				String filename = "IV-data-" + df.format(new Date()) + ".jpg";
 				if (mGraph.saveToGallery(filename, 100))
 				{
@@ -722,7 +723,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	@Override
 	public void onPrepareOptionsMenu(Menu menu)
 	{
-		if (menu == null || mBluetooth.isConnected())
+		if (menu != null && mBluetooth.isConnected())
 		{
 			// Update checked-ness based on flags we've received back
 			for (int i = 0; i < menu.size(); ++i)
@@ -882,7 +883,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			}
 			catch (Exception e)
 			{
-
+				Log.d(TAG, e.getMessage());
 			}
 		}
 		//mDataSet.add(MessageData.stringToModuleData(output));
@@ -918,8 +919,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	/**
 	 * Reset input and output streams and make sure socket is closed.
-	 * This method will be used during shutdown() to ensure that the connection is properly closed during a shutdown.
-	 * @return
+	 * This method will be used during shutdown() to ensure that the
+	 * connection is properly closed during a shutdown.
 	 */
 	private void disconnect()
 	{
