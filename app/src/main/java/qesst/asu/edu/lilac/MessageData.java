@@ -12,6 +12,24 @@ public class MessageData
 	private final static String TAG = "MessageData";
 	private static StringBuffer mBuffer = new StringBuffer("");
 
+	private String mJsonString = "";
+	private ModuleDataEntry mDataEntry = null;
+
+	public MessageData(String jsonString)
+	{
+		mJsonString = jsonString;
+	}
+
+	public ModuleDataEntry getModuleDataEntry()
+	{
+		if (mDataEntry == null)
+		{
+			mDataEntry = new ModuleDataEntry();
+			// TODO: add parsing here?
+		}
+		return mDataEntry;
+	}
+
 	public static ArrayList<ModuleDataEntry> stringToModuleData(String data)
 	{
 		// Keep appending string data to the buffer until we get a terminating char

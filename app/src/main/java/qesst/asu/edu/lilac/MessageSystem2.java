@@ -34,7 +34,7 @@ public class MessageSystem2 extends Activity
 		setContentView(R.layout.activity_main);
 		uiThreadHandler = new UIThreadHandler();
 		new SampleThread().start();
-		OnClickListener listener = new OnClickListener() {
+		/*OnClickListener listener = new OnClickListener() {
 
 			public void onClick(View v) {
 				if (null != childThreadHandler) {
@@ -56,6 +56,7 @@ public class MessageSystem2 extends Activity
 		};
 		findViewById(R.id.btn_begin).setOnClickListener(listener);
 		findViewById(R.id.btn_end).setOnClickListener(listener);
+		*/
 	}
 
 	private class SampleThread extends Thread {
@@ -97,7 +98,7 @@ public class MessageSystem2 extends Activity
 					Toast.makeText(MessageSystem2.this, msg.obj.toString(),
 					               Toast.LENGTH_SHORT).show();
 					break;
-				case RESP_LONG_OP_STARTED:
+				/*case RESP_LONG_OP_STARTED:
 					((Button) findViewById(R.id.btn_begin)).setVisibility(View.GONE);
 					Toast.makeText(MessageSystem2.this, "Long operation started",
 					               Toast.LENGTH_SHORT).show();
@@ -111,6 +112,7 @@ public class MessageSystem2 extends Activity
 							+ msg.getData().getString(RESP_KEY_1),
 							Toast.LENGTH_SHORT).show();
 					break;
+					*/
 			}
 			super.handleMessage(msg);
 		}

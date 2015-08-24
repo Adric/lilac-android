@@ -76,6 +76,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	private int mSingleEntryIndex;
 
+	private boolean mMeasuring;
 
 	private BluetoothActivity mBluetooth;
 
@@ -96,8 +97,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	// UI
 	private Button btnConnect = null;
-	private Button btnBegin = null;
-	private Button btnEnd = null;
+	private Button btnMeasure = null;
 	private TextView txtReceived = null;
 	private Button btnClear = null;
 	private Button btnFlags = null;
@@ -146,8 +146,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		btnScreenshot = (Button) view.findViewById(R.id.btn_screenshot);
 		//btnAverage = (Button) view.findViewById(R.id.btn_average);
 		//btnDebug = (Button) view.findViewById(R.id.btn_debug_output);
-		btnBegin = (Button) view.findViewById(R.id.btn_begin);
-		btnEnd = (Button) view.findViewById(R.id.btn_end);
+		btnMeasure = (Button) view.findViewById(R.id.btn_measure);
 		//btnContinuous = (Button) view.findViewById(R.id.btn_continuous);
 		//btnTemp = (Button) view.findViewById(R.id.btn_temp);
 		txtReceived = (TextView) view.findViewById(R.id.txt_received);
@@ -203,28 +202,35 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		});
 
 
-		btnBegin.setOnClickListener(new View.OnClickListener()
+		btnMeasure.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				mEndMeasurement = false;
-				mFlags.add(EFlag.RUN);
-				mBluetooth.write(EFlag.toJsonString(mFlags));
+				if (!mMeasuring)
+				{
+					mMeasuring = true;
+					if (mFlags.contains(EFlag.CONTINUOUS)) 
+					{
+						btnMeasure.setText(getResources().getString(R.string.end_measurement));	
+					}
+					mFlags.add(EFlag.RUN);
+					mBluetooth.write(EFlag.toJsonString(mFlags));
+				}
+				else
+				{
+					mMeasuring = false;
+					if (mFlags.contains(EFlag.CONTINUOUS))
+					{
+						btnMeasure.setText(getResources().getString(R.string.begin_measurement));
+					}
+					mFlags.remove(EFlag.RUN);
+					mBluetooth.write(EFlag.toJsonString(mFlags));
+
+					// Make sure all our UI data buttons are enabled
+					toggleBTUI(!mDataSet.isEmpty());
+				}
 			}
 		});
-
-		btnEnd.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				mFlags.remove(EFlag.RUN);
-				mBluetooth.write(EFlag.toJsonString(mFlags));
-
-				// Make sure all our UI data buttons are enabled
-				toggleBTUI(!mDataSet.isEmpty());
-			}
-		});
-
 
 		btnFlags.setOnClickListener(new View.OnClickListener()
 		{
@@ -913,9 +919,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		//mDataSet.add(MessageData.stringToModuleData(output));
 		Log.e(TAG, output);
 
-		// Update graph with any data if we have some
-		//mDataSet.add(MessageData.stringToModuleData(output));
-
 		// Clear out what we get
 		arr.clear();
 
@@ -954,11 +957,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	 */
 	private void disconnect()
 	{
-		//mMessageSystem = null;
-
+		// Also disconnects the message system
 		mBluetooth.disconnect();
 
-		txtReceived.append("Bluetooth Disconnected!\n");
+		txtReceived.append("\nBluetooth Disconnected!\n");
 	}
 
 	private void toggleBTUI(boolean enable)
