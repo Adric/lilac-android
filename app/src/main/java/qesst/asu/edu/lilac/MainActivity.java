@@ -17,19 +17,6 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity //extends AppCompatActivity
 {
-
-	public static class SettingsFragment extends PreferenceFragment
-	{
-		@Override
-		public void onCreate(Bundle savedInstanceState)
-		{
-			super.onCreate(savedInstanceState);
-
-			// Load the preferences from an XML resource
-			addPreferencesFromResource(R.xml.preferences);
-		}
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -76,6 +63,7 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 			                    .commit();
 			*/
 
+			/*
 			FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 			// Replace whatever is in the fragment_container view with this fragment,
@@ -85,9 +73,12 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 
 			// Commit the transaction
 			transaction.commit();
-
+			*/
 
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+			Intent i = new Intent(this, SettingsActivity.class);
+			startActivity(i);
 
 			return true;
 		}
