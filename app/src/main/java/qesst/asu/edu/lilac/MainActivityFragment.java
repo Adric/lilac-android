@@ -2,7 +2,9 @@ package qesst.asu.edu.lilac;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +46,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private boolean mUseDummyData = false;
 
 	private boolean mMeasuring;
+
+	SharedPreferences mPreferences;
 
 	private BluetoothActivity mBluetooth;
 
@@ -101,6 +105,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	                         Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_iv_main, container, false);
+
+		mPreferences = //getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+						PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
 
 		// Set up the UI
 		btnConnect = (Button) view.findViewById(R.id.btn_connect);
@@ -198,6 +205,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 					// Make sure all our UI data buttons are enabled
 					toggleBTUI(!mDataSet.isEmpty());
+
+					if (mPreferences.getBoolean("pref_auto_save_files_check", false))
+					{
+						saveFile();
+						saveImage();
+					}
 				}
 			}
 		});
@@ -225,98 +238,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			public void onClick(View v)
 			{
-				String text = "";
-				String[] output = txtReceived.getText().toString().split(Character.toString('\n'));
-				for (int i = 0; i < output.length; ++i)
-				{
-					text += output[i];
-					if (i < output.length - 1)
-					{
-						text += "\n";
-					}
-				}
-
-				// Create filename
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-
-				// TODO: add preferences to check for local enum between .txt and .csv
-				String filename = "IV-data-" + df.format(new Date()) + ".txt";
-
-				// Try to write to SDcard
-				if (canWriteOnExternalStorage())
-				{
-					// TODO: move this list into a method that rebuilds it from the file directory on request
-					if (!mFilenames.contains(filename))
-					{
-						mFilenames.add(filename);
-					}
-
-					File file = getStorageDir("Lilac");
-					if (file == null)
-					{
-						Log.e(TAG, "Could not create lilac folder to write in");
-						return;
-					}
-
-					try
-					{
-						FileOutputStream out = new FileOutputStream(file + File.separator + filename);
-						ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
-						for (String s : data)
-						{
-							// Add newlines here
-							out.write((s + "\n").getBytes());
-						}
-						out.close();
-
-						Log.d(TAG, filename + " written successfully");
-						Toast.makeText(getActivity(), filename + " saving successful!",
-						               Toast.LENGTH_SHORT).show();
-					}
-					catch (IOException e)
-					{
-						Log.e(TAG, "Could not write file: " + filename + ", trying alternate way");
-						try
-						{
-							FileOutputStream fout = getActivity().getApplicationContext().openFileOutput(filename, Context.MODE_APPEND);
-							OutputStreamWriter osw = new OutputStreamWriter(fout);
-
-							// Write the string to the file
-							ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
-							for (String s : data)
-							{
-								// Add newlines here
-								osw.write(s + "\n");
-							}
-							osw.close();
-						}
-						catch (IOException ioe)
-						{
-							Log.e(TAG, "OutputStreamWriter could not write " + filename);
-							try
-							{
-								File root = new File(Environment.DIRECTORY_DOWNLOADS);
-								File gpxfile = new File(root, filename);
-								FileWriter fw = new FileWriter(gpxfile);
-								fw.append(text);
-								fw.flush();
-								fw.close();
-							}
-							catch (IOException ioe2)
-							{
-								Log.e(TAG, "FileWriter failed to write " + filename + " too!");
-								Toast.makeText(getActivity(), filename + " saving failed!",
-								               Toast.LENGTH_SHORT).show();
-							}
-						}
-					}
-				}
-				else
-				{
-					Log.e(TAG, "Could not write to external storage!");
-					Toast.makeText(getActivity(), filename + " saving failed!",
-					               Toast.LENGTH_SHORT).show();
-				}
+				saveFile();
 			}
 		});
 
@@ -381,16 +303,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			//TODO: change library to use Lilac subfolder
 			public void onClick(View v)
 			{
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-				String filename = "IV-data-" + df.format(new Date()) + ".jpg";
-				if (mGraph.saveToGallery(filename, 100))
-				{
-					Toast.makeText(getActivity(), "Saving " + filename + " successful!", Toast.LENGTH_SHORT).show();
-				}
-				else
-				{
-					Toast.makeText(getActivity(), "Saving " + filename + " failed!", Toast.LENGTH_SHORT).show();
-				}
+				saveImage();
 			}
 		});
 
@@ -730,6 +643,108 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		if (btnWriteToFile != null) btnWriteToFile.setEnabled(enable);
 		if (btnEmail != null) btnEmail.setEnabled(enable);
 		if (btnScreenshot != null) btnScreenshot.setEnabled(enable);
+	}
+
+	private void saveFile()
+	{
+		// Create filename
+		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
+
+		// TODO: add preferences to check for local enum between .txt and .csv
+		String filename = "IV-data-" + df.format(new Date()) + ".txt";
+
+		// Try to write to SDcard
+		if (canWriteOnExternalStorage())
+		{
+			// TODO: move this list into a method that rebuilds it from the file directory on request
+			if (!mFilenames.contains(filename))
+			{
+				mFilenames.add(filename);
+			}
+
+			File file = getStorageDir("Lilac");
+			if (file == null)
+			{
+				Log.e(TAG, "Could not create lilac folder to write in");
+				return;
+			}
+
+			ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
+			try
+			{
+				FileOutputStream out = new FileOutputStream(file + File.separator + filename);
+				for (String s : data)
+				{
+					// Add newlines here
+					out.write((s + "\n").getBytes());
+				}
+				out.close();
+
+				Log.d(TAG, filename + " written successfully");
+				Toast.makeText(getActivity(), filename + " saving successful!",
+				               Toast.LENGTH_SHORT).show();
+			}
+			catch (IOException e)
+			{
+				Log.e(TAG, "Could not write file: " + filename + ", trying alternate way");
+				try
+				{
+					FileOutputStream fout = getActivity().getApplicationContext().openFileOutput(filename, Context.MODE_APPEND);
+					OutputStreamWriter osw = new OutputStreamWriter(fout);
+
+					// Write the string to the file
+					for (String s : data)
+					{
+						// Add newlines here
+						osw.write(s + "\n");
+					}
+					osw.close();
+				}
+				catch (IOException ioe)
+				{
+					Log.e(TAG, "OutputStreamWriter could not write " + filename);
+					try
+					{
+						File root = new File(Environment.DIRECTORY_DOWNLOADS);
+						File gpxfile = new File(root, filename);
+						FileWriter fw = new FileWriter(gpxfile);
+						for (String s : data)
+						{
+							// Add newlines here
+							fw.append(s + "\n");
+						}
+						fw.flush();
+						fw.close();
+					}
+					catch (IOException ioe2)
+					{
+						Log.e(TAG, "FileWriter failed to write " + filename + " too!");
+						Toast.makeText(getActivity(), filename + " saving failed!",
+						               Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
+		else
+		{
+			Log.e(TAG, "Could not write to external storage!");
+			Toast.makeText(getActivity(), filename + " saving failed!",
+			               Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	public void saveImage()
+	{
+		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
+		String filename = "IV-data-" + df.format(new Date()) + ".jpg";
+		if (mGraph.saveToGallery(filename, 100))
+		{
+			Toast.makeText(getActivity(), "Saving " + filename + " successful!", Toast.LENGTH_SHORT).show();
+		}
+		else
+		{
+			Toast.makeText(getActivity(), "Saving " + filename + " failed!", Toast.LENGTH_SHORT).show();
+		}
 	}
 }
 
