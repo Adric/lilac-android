@@ -159,6 +159,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		lblVoc.setText("");
 		lblIsc.setText("");
 
+		toggleBTUI(false);
+
 		// set non clickable in code since xml flags don't work
 		final boolean readOnly = true;
 		txtReceived.setFocusable(!readOnly);
@@ -194,6 +196,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					mFlags.remove(EFlag.RUN);
 					mBluetooth.write(EFlag.toJsonString(mFlags));
 					disconnect();
+					toggleBTUI(!mDataSet.isEmpty());
 					btnConnect.setText("Connect");
 				}
 			}
@@ -216,6 +219,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				mFlags.remove(EFlag.RUN);
 				mBluetooth.write(EFlag.toJsonString(mFlags));
+
+				// Make sure all our UI data buttons are enabled
+				toggleBTUI(!mDataSet.isEmpty());
 			}
 		});
 
@@ -922,6 +928,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		if (mUseDummyData)
 		{
 			entry = mDummyData.getNextEntry();
+			mDataSet.add(entry); // For UI enabling, etc
 		}
 		else
 		{
@@ -933,6 +940,11 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			entry = mDataSet.get(mDataSet.size()-1);
 		}
 		mGraph.updateGraph(entry);
+
+		// Make sure all our UI data buttons are enabled
+		// if we're going to be continuously updating
+		// or just have a single data point
+		toggleBTUI(!mDataSet.isEmpty());
 	}
 
 	/**
@@ -947,6 +959,13 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mBluetooth.disconnect();
 
 		txtReceived.append("Bluetooth Disconnected!\n");
+	}
+
+	private void toggleBTUI(boolean enable)
+	{
+		if (btnWriteToFile != null) btnWriteToFile.setEnabled(enable);
+		if (btnEmail != null) btnEmail.setEnabled(enable);
+		if (btnScreenshot != null) btnScreenshot.setEnabled(enable);
 	}
 }
 
