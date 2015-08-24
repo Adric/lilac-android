@@ -102,7 +102,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mVoc = 0.f;
 		mCallCount = 0;
 		mFlags = EnumSet.noneOf(EFlag.class);
-		mFlags.add(EFlag.VOLTAGE); // DEBUG REMOVE ME
+
+		// Default flags we want
+		mFlags.add(EFlag.VOLTAGE);
+		mFlags.add(EFlag.CURRENT);
+		mFlags.add(EFlag.AVERAGE);
+		mFlags.add(EFlag.CONTINUOUS); // DEBUG REMOVE ME
 	}
 
 	@Override
