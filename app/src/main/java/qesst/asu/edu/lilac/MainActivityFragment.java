@@ -315,7 +315,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						bw.close();*/
 
 						FileOutputStream out = new FileOutputStream(file + File.separator + filename);
-						ArrayList<String> data = mDataSet.getTabbedStrings();
+						ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
 						for (String s : data)
 						{
 							out.write((s + "\n").getBytes());
@@ -450,10 +450,20 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				// Email
 				Intent email = new Intent(Intent.ACTION_SEND);
-				email.putExtra(Intent.EXTRA_EMAIL, "Receiver Email Address" );
+				email.putExtra(Intent.EXTRA_EMAIL, "Receiver Email Address");
 				email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				email.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-				email.putExtra(Intent.EXTRA_TEXT, "Email Text");
+
+				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
+				String subject = "IV-data-" + df.format(new Date());
+				email.putExtra(Intent.EXTRA_SUBJECT, subject);
+
+				String text = "";
+				ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.COMMA);
+				for (String s: data)
+				{
+					text += s + "\n";
+				}
+				email.putExtra(Intent.EXTRA_TEXT, text);
 
 				//Mime type of the attachment (or) u can use sendIntent.setType("*/*")
 				email.setType("text/plain");
@@ -461,6 +471,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				//email.setType("*/*");
 
 				//Full Path to the attachment
+				/*
 				if (!mFilenames.isEmpty())
 				{
 					try
@@ -475,6 +486,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						e.printStackTrace();
 					}
 				}
+				*/
+
 				try
 				{
 					startActivity(Intent.createChooser(email, "Send Message..."));

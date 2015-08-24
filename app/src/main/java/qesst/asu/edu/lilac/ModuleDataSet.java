@@ -9,8 +9,26 @@ import java.util.ArrayList;
  * Data set for storing module data entries
  */
 public class ModuleDataSet
-{
+{;
 	private ArrayList<ModuleDataEntry> mModuleDataEntries = new ArrayList<ModuleDataEntry>();
+
+	public enum EDataSeparator
+	{
+		COMMA(","),
+		TAB("\t")
+		;
+
+		private String val;
+		EDataSeparator(String val)
+		{
+			this.val = val;
+		}
+
+		public String get()
+		{
+			return val;
+		}
+	}
 
 	public ModuleDataSet()
 	{
@@ -329,25 +347,29 @@ public class ModuleDataSet
 	}
 
 	/*
-	 * Returns everything as an array of tab-separated strings
+	 * Returns everything as an array of separated strings
+	 * suitable for writing to file later on
 	 */
-	public ArrayList<String> getTabbedStrings()
+	public ArrayList<String> getStringsForFile(EDataSeparator data_separator)
 	{
 		ArrayList<String> strings = new ArrayList<String>();
 
 		// TODO: make this modular to the data set
-		strings.add("TIME\tVOLTAGE\tCURRENT\tTEMPERATURE\n");
+		strings.add("TIME" + data_separator.get() +
+		            "VOLTAGE" + data_separator.get() +
+		            "CURRENT" + data_separator.get() +
+		            "TEMPERATURE");
 		for (ModuleDataEntry entry : mModuleDataEntries)
 		{
 			String str = "";
 			if (entry.hasTime())    str += Long.toString(entry.getTime());
-			str += "\t";
+			str += data_separator.get();
 
 			if (entry.hasVoltage()) str += Double.toString(entry.getVoltage());
-			str += "\t";
+			str += data_separator.get();
 
 			if (entry.hasCurrent()) str += Double.toString(entry.getCurrent());
-			str += "\t";
+			str += data_separator.get();
 
 			if (entry.hasTemp())    str += Double.toString(entry.getTemp());
 
