@@ -21,4 +21,10 @@
 	<string name="pref_custom_mac_check">Custom MAC Address</string>
 	<string name="pref_custom_mac_summary">e.g. 30:14:09:03:01:86</string>
 	<string name="pref_custom_mac_hint">Enter MAC address</string>
+
+	<string name="pref_file_title">File</string>
+	<string name="pref_file_data_separator_title">Select the separator for file data</string>
+	<string name="pref_file_data_separator_default">Tab Value</string>
+	<string name="pref_email_data_separator_title">Select the separator for email data</string>
+	<string name="pref_email_data_separator_default">Comma Value</string>
 </resources>

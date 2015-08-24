@@ -26,4 +26,22 @@
 			android:maxLines="1"
 			android:defaultValue="" />
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/pref_file_title"
+		android:key="pref_key_file_settings">
+		<ListPreference
+			android:key="pref_file_data_separator"
+			android:title="@string/pref_file_data_separator_title"
+			android:dialogTitle="@string/pref_file_data_separator_title"
+			android:entries="@array/pref_file_data_separator_entries"
+			android:entryValues="@array/pref_file_data_separator_values"
+			android:defaultValue="@string/pref_file_data_separator_default"/>
+		<ListPreference
+			android:key="pref_email_data_separator"
+			android:title="@string/pref_email_data_separator_title"
+			android:dialogTitle="@string/pref_email_data_separator_title"
+			android:entries="@array/pref_email_data_separator_entries"
+			android:entryValues="@array/pref_email_data_separator_values"
+			android:defaultValue="@string/pref_email_data_separator_default"/>
+	</PreferenceCategory>
 </PreferenceScreen>
