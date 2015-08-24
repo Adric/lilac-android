@@ -22,10 +22,10 @@
 	<string name="pref_custom_mac_summary">e.g. 30:14:09:03:01:86</string>
 	<string name="pref_custom_mac_hint">Enter MAC address</string>
 
-	<string name="pref_file_title">File</string>
-	<string name="pref_file_data_separator_title">Select File Data Separator</string>
+	<string name="pref_file_title">Files</string>
+	<string name="pref_file_data_separator_title">File Data Separator</string>
 	<string name="pref_file_data_separator_default">Tab Value</string>
-	<string name="pref_email_data_separator_title">Select Email Data Separator</string>
+	<string name="pref_email_data_separator_title">Email Data Separator</string>
 	<string name="pref_email_data_separator_default">Comma Value</string>
 	<string name="pref_auto_save_files_check">Automatically Save Data</string>
 	<string name="pref_auto_save_files_check_summary">Automatically saves graphs and data files after measurement</string>
