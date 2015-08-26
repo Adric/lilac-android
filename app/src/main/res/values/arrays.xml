@@ -4,7 +4,6 @@
 		<item>Comma</item>
 		<item>Tab</item>
 	</string-array>
-
 	<string-array name="pref_file_data_separator_values">
 		<item>Comma Value</item>
 		<item>Tab Value</item>
@@ -14,9 +13,31 @@
 		<item>Comma</item>
 		<item>Space</item>
 	</string-array>
-
 	<string-array name="pref_email_data_separator_values">
 		<item>Comma Value</item>
 		<item>Space Value</item>
+	</string-array>
+
+	<string-array name="pref_default_flag_entries">
+		<item>Voltage</item>
+		<item>Current</item>
+		<item>Temperature</item>
+		<item>Continuous</item>
+		<item>Average</item>
+		<item>Debug Info</item>
+	</string-array>
+	<string-array name="pref_default_flag_values">
+		<item>Voltage Value</item>
+		<item>Current Value</item>
+		<item>Temperature Value</item>
+		<item>Continuous Value</item>
+		<item>Average Value</item>
+		<item>Debug Info Value</item>
+	</string-array>
+	<string-array name="pref_default_flag_values_on_first_run">
+		<item>Voltage Value</item>
+		<item>Current Value</item>
+		<item>Continuous Value</item>
+		<item>Average Value</item>
 	</string-array>
 </resources>

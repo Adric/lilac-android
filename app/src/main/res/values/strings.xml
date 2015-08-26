@@ -29,4 +29,8 @@
 	<string name="pref_email_data_separator_default">Comma Value</string>
 	<string name="pref_auto_save_files_check">Automatically Save Data</string>
 	<string name="pref_auto_save_files_check_summary">Automatically saves graphs and data files after measurement</string>
+
+	<string name="pref_measurement_title">Measurements</string>
+	<string name="pref_default_flag_title">Default Measurements</string>
+	<string name="pref_default_flag_summary">Set the quantities to measure by default</string>
 </resources>

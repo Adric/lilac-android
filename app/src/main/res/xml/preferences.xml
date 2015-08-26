@@ -51,4 +51,16 @@
 			android:summary="@string/pref_auto_save_files_check_summary"
 			android:defaultValue="false" />
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/pref_measurement_title"
+	    android:key="pref_key_measurements">
+		<MultiSelectListPreference
+			android:key="pref_default_flag_list"
+			android:title="@string/pref_default_flag_title"
+			android:summary="@string/pref_default_flag_summary"
+			android:entries="@array/pref_default_flag_entries"
+			android:entryValues="@array/pref_default_flag_values"
+			android:defaultValue="@array/pref_default_flag_values_on_first_run">
+		</MultiSelectListPreference>
+	</PreferenceCategory>
 </PreferenceScreen>
