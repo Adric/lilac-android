@@ -248,6 +248,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				txtReceived.setText("");
 				mGraph.reset();
+				mDataSet.clear();
 			}
 		});
 

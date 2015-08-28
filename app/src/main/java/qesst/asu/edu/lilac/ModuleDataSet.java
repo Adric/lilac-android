@@ -437,4 +437,9 @@ public class ModuleDataSet
 	{
 		return mModuleDataEntries.isEmpty();
 	}
+
+	public void clear()
+	{
+		mModuleDataEntries.clear();
+	}
 }
