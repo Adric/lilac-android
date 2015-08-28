@@ -27,17 +27,17 @@
 		<item>Debug Info</item>
 	</string-array>
 	<string-array name="pref_default_flag_values">
-		<item>Voltage Value</item>
-		<item>Current Value</item>
-		<item>Temperature Value</item>
-		<item>Continuous Value</item>
-		<item>Average Value</item>
-		<item>Debug Info Value</item>
+		<item>V</item>
+		<item>I</item>
+		<item>T</item>
+		<item>C</item>
+		<item>A</item>
+		<item>D</item>
 	</string-array>
 	<string-array name="pref_default_flag_values_on_first_run">
-		<item>Voltage Value</item>
-		<item>Current Value</item>
-		<item>Continuous Value</item>
-		<item>Average Value</item>
+		<item>V</item>
+		<item>I</item>
+		<item>C</item>
+		<item>A</item>
 	</string-array>
 </resources>

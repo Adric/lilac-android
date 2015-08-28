@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Set;
 
 
 /**
@@ -94,10 +95,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mFlagMenuItems = new ArrayList<MenuItem>();
 
 		// Default flags we want
+		/*
 		mFlags.add(EFlag.VOLTAGE);
 		mFlags.add(EFlag.CURRENT);
 		mFlags.add(EFlag.AVERAGE);
 		mFlags.add(EFlag.CONTINUOUS); // DEBUG REMOVE ME
+		*/
 	}
 
 	@Override
@@ -109,7 +112,21 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mPreferences = //getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 						PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
 
-		// Set up the UI
+		// Set up the flags
+		Set<String> prefFlags = mPreferences.getStringSet("pref_default_flag_list", null);
+		if (prefFlags != null)
+		{
+			for (String s: prefFlags)
+			{
+				EFlag flag = EFlag.toType(s.charAt(0));
+				if (flag != EFlag.NONE)
+				{
+					mFlags.add(flag);
+				}
+			}
+		}
+
+			// Set up the UI
 		btnConnect = (Button) view.findViewById(R.id.btn_connect);
 		btnWriteToFile = (Button) view.findViewById(R.id.btn_to_file);
 		btnEmail = (Button) view.findViewById(R.id.btn_email);
