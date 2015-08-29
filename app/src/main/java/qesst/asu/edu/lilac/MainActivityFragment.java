@@ -59,6 +59,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private DummyData mDummyData = new DummyData();
 
 	private ModuleDataSet mDataSet;
+	
+	private String mFilenameBase;
 
 	/**
 	 * Class variables
@@ -93,6 +95,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mCallCount = 0;
 		mFlags = EnumSet.noneOf(EFlag.class);
 		mFlagMenuItems = new ArrayList<MenuItem>();
+		
+		mFilenameBase = "IV-data";
 
 		// Default flags we want
 		/*
@@ -229,6 +233,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				if (!mMeasuring)
 				{
+					// Generate a new filename for this data
+					SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
+					mFilenameBase = "IV-data-" + df.format(new Date());
+					
 					mMeasuring = true;
 					if (mFlags.contains(EFlag.CONTINUOUS)) 
 					{
@@ -293,54 +301,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			public void onClick(View v)
 			{
-				// Email
-				Intent email = new Intent(Intent.ACTION_SEND);
-				email.putExtra(Intent.EXTRA_EMAIL, "Receiver Email Address");
-				email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-				String subject = "IV-data-" + df.format(new Date());
-				email.putExtra(Intent.EXTRA_SUBJECT, subject);
-
-				String text = "";
-				ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.COMMA);
-				for (String s: data)
-				{
-					text += s + "\n";
-				}
-				email.putExtra(Intent.EXTRA_TEXT, text);
-
-				//Mime type of the attachment (or) u can use sendIntent.setType("*/*")
-				email.setType("text/plain");
-				//email.setType("application/YourMimeType");
-				//email.setType("*/*");
-
-				//Full Path to the attachment
-				/*
-				if (!mFilenames.isEmpty())
-				{
-					try
-					{
-						// Could also use URIs in the form:
-						//Uri u1 = Uri.fromFile(file);
-						FileInputStream fin = getActivity().getApplicationContext().openFileInput(mFilenames.get(mFilenames.size() - 1));
-						email.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + fin.toString()));
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
-				*/
-
-				try
-				{
-					startActivity(Intent.createChooser(email, "Send Message..."));
-				}
-				catch (android.content.ActivityNotFoundException ex)
-				{
-					ex.printStackTrace();
-				}
+				emailData();
 			}
 		});
 
@@ -474,6 +435,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 			updateCheckedAndFlags(item, getEFlagFromMenuItem(item));
 
+			// If anything was changed, send the change
 			if (old_flag_count != mFlags.size())
 			{
 				mBluetooth.write(EFlag.toJsonString(mFlags));
@@ -711,10 +673,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private void saveFile()
 	{
 		// Create filename
-		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-
 		// TODO: add preferences to check for local enum between .txt and .csv
-		String filename = "IV-data-" + df.format(new Date()) + ".txt";
+		String filename = mFilenameBase + ".txt";
 
 		// Try to write to SDcard
 		if (canWriteOnExternalStorage())
@@ -798,8 +758,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	
 	public void saveImage()
 	{
-		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-		String filename = "IV-data-" + df.format(new Date()) + ".jpg";
+		String filename = mFilenameBase + ".jpg";
 		if (mGraph.saveToGallery(filename, 100))
 		{
 			Toast.makeText(getActivity(), "Saving " + filename + " successful!", Toast.LENGTH_SHORT).show();
@@ -807,6 +766,64 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		else
 		{
 			Toast.makeText(getActivity(), "Saving " + filename + " failed!", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public void emailData()
+	{
+		if (mDataSet.isEmpty())
+		{
+			Toast.makeText(getActivity(), "No data to email!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		Intent email = new Intent(Intent.ACTION_SEND);
+		email.putExtra(Intent.EXTRA_EMAIL, "Receiver Email Address");
+		email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		String subject = mFilenameBase;
+		email.putExtra(Intent.EXTRA_SUBJECT, subject);
+
+		// TODO: add preference for either emailing the data as an attachment or as the email body
+		String text = "";
+		ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.COMMA);
+		for (String s: data)
+		{
+			text += s + "\n";
+		}
+		email.putExtra(Intent.EXTRA_TEXT, text);
+
+		//Mime type of the attachment (or) u can use sendIntent.setType("*/*")
+		email.setType("text/plain");
+		//email.setType("application/YourMimeType");
+		//email.setType("*/*");
+
+		// TODO: be able to email a screenshot as well
+		//Full Path to the attachment
+				/*
+				if (!mFilenames.isEmpty())
+				{
+					try
+					{
+						// Could also use URIs in the form:
+						//Uri u1 = Uri.fromFile(file);
+						FileInputStream fin = getActivity().getApplicationContext().openFileInput(mFilenames.get(mFilenames.size() - 1));
+						email.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + fin.toString()));
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+				*/
+
+		try
+		{
+			startActivity(Intent.createChooser(email, "Send Message..."));
+		}
+		catch (android.content.ActivityNotFoundException ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 }
