@@ -167,8 +167,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 		btnMeasure.setEnabled(false);
 		btnConnect.setText("Connect");
-		lblVoc.setText("");
-		lblIsc.setText("");
+		lblVoc.setText("Voc: ");
+		lblIsc.setText("Isc: ");
 
 		toggleBTUI(false);
 
@@ -274,8 +274,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			public void onClick(View v)
 			{
 				txtReceived.setText("");
-				lblVoc.setText("");
-				lblIsc.setText("");
+				lblVoc.setText("Voc: ");
+				lblIsc.setText("Isc: ");
 				mGraph.reset();
 				mDataSet.clear();
 			}
@@ -625,19 +625,19 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						}
 					}
 				}
-				if (jObj.has("O"))
+				if (jObj.has("VOC"))
 				{
 					Log.d(TAG, "VOC found");
 					lblVoc.setEnabled(true);
 					lblVoc.setText("Voc: " + Double.toString(jObj.getDouble("VOC")));
-					Log.d(TAG, "VOC: " + jObj.getDouble("VOC"));
+					Log.d(TAG, "VOC: " + Double.toString(jObj.getDouble("VOC")));
 				}
-				if (jObj.has("U"))
+				if (jObj.has("ISC"))
 				{
 					Log.d(TAG, "ISC found");
 					lblIsc.setEnabled(true);
 					lblIsc.setText("Isc: " + Double.toString(jObj.getDouble("ISC")));
-					Log.d(TAG, "ISC: " + jObj.getDouble("ISC"));
+					Log.d(TAG, "ISC: " + Double.toString(jObj.getDouble("ISC")));
 				}
 				if (jObj.has("E"))
 				{
