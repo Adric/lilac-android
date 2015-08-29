@@ -55,12 +55,12 @@
 		android:title="@string/pref_measurement_title"
 	    android:key="pref_key_measurements">
 		<MultiSelectListPreference
-			android:key="pref_default_flag_list"
-			android:title="@string/pref_default_flag_title"
-			android:summary="@string/pref_default_flag_summary"
-			android:entries="@array/pref_default_flag_entries"
-			android:entryValues="@array/pref_default_flag_values"
-			android:defaultValue="@array/pref_default_flag_values_on_first_run">
+			android:key="pref_flag_list"
+			android:title="@string/pref_flag_title"
+			android:summary="@string/pref_flag_summary"
+			android:entries="@array/pref_flag_entries"
+			android:entryValues="@array/pref_flag_values"
+			android:defaultValue="@array/pref_flag_values_default">
 		</MultiSelectListPreference>
 	</PreferenceCategory>
 </PreferenceScreen>

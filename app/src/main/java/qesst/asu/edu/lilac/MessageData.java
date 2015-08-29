@@ -124,7 +124,7 @@ public class MessageData
 				continue;
 			}
 
-			ModuleDataEntry mde = new ModuleDataEntry(EFlag.toType(type.charAt(0)), value);
+			ModuleDataEntry mde = new ModuleDataEntry(EFlag.fromChar(type.charAt(0)), value);
 			Log.d(TAG, "New ModuleDataEntry created: " + mde.toString());
 			dataEntries.add(mde);
 		}

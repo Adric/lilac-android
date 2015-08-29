@@ -18,23 +18,25 @@
 		<item>Space Value</item>
 	</string-array>
 
-	<string-array name="pref_default_flag_entries">
+	<string-array name="pref_flag_entries">
 		<item>Voltage</item>
 		<item>Current</item>
 		<item>Temperature</item>
 		<item>Continuous</item>
 		<item>Average</item>
-		<item>Debug Info</item>
+		<item>Sweep</item>
+		<item>Debug Output</item>
 	</string-array>
-	<string-array name="pref_default_flag_values">
+	<string-array name="pref_flag_values">
 		<item>V</item>
 		<item>I</item>
 		<item>T</item>
 		<item>C</item>
 		<item>A</item>
+		<item>W</item>
 		<item>D</item>
 	</string-array>
-	<string-array name="pref_default_flag_values_on_first_run">
+	<string-array name="pref_flag_values_default">
 		<item>V</item>
 		<item>I</item>
 		<item>C</item>

@@ -15,18 +15,18 @@ import java.util.EnumSet;
  */
 public enum EFlag
 {
-	NONE(1 << 0),
-	ERROR(1 << 1),
-	VOLTAGE(1 << 2),
-	CURRENT(1 << 3),
-	TEMP(1 << 4),
-	CONTINUOUS(1 << 5),
-	AVERAGE(1 << 6),
-	DEBUG_OUTPUT(1 << 7),
-	RUN(1 << 8),
-	GET_FLAGS(1 << 9),
+	NONE(0),
+	ERROR(1),
+	VOLTAGE(1 << 1),
+	CURRENT(1 << 2),
+	TEMP(1 << 3),
+	CONTINUOUS(1 << 4),
+	AVERAGE(1 << 5),
+	DEBUG_OUTPUT(1 << 6),
+	RUN(1 << 7),
+	GET_FLAGS(1 << 8),
+	SWEEP(1 << 9),
 	SET_FLAGS(1 << 10),
-	SWEEP(VOLTAGE.val | CURRENT.val | CONTINUOUS.val),
 	;
 
 	private final static String TAG = "EFlag";
@@ -116,7 +116,7 @@ public enum EFlag
 		writer.close();
 	}
 
-	public static EFlag toType(char ch)
+	public static EFlag fromChar(char ch)
 	{
 		switch (ch)
 		{
@@ -127,7 +127,7 @@ public enum EFlag
 			case 'T':
 				return EFlag.TEMP;
 			case 'C':
-				return EFlag.CURRENT;
+				return EFlag.CONTINUOUS;
 			case 'A':
 				return EFlag.AVERAGE;
 			case 'W':
@@ -172,28 +172,27 @@ public enum EFlag
 		switch (val)
 		{
 			case 1:
-				return 'V';
-			case 2:
-				return 'I';
-			case 3:
-				return 'T';
-			case 4:
-				return 'C';
-			case 5:
-				return 'A';
-			case 6:
-				return 'W';
-			case 7:
-				return 'D';
-			case 8:
-				return 'B';
-			case 9:
 				return 'E';
-			case 10:
-				return '!';
-			case 11:
+			case 1 << 1:
+				return 'V';
+			case 1 << 2:
+				return 'I';
+			case 1 << 3:
+				return 'T';
+			case 1 << 4:
+				return 'C';
+			case 1 << 5:
+				return 'A';
+			case 1 << 6:
+				return 'D';
+			case 1 << 7:
+				return 'R';
+			case 1 << 8:
+				return 'G';
+			case 1 << 9:
+				return 'W';
+			case 1 << 10:
 				return 'F';
-			case 0:
 			default:
 				return '\0';
 		}
@@ -201,6 +200,9 @@ public enum EFlag
 
 	public String toString()
 	{
+		/*
+			Make sure these match with arrays.xml
+		 */
 		switch (this)
 		{
 			case NONE:
@@ -230,5 +232,18 @@ public enum EFlag
 			default:
 				return "";
 		}
+	}
+
+	public static EFlag fromString(String str)
+	{
+		str = str.toLowerCase();
+		for (EFlag flag : EFlag.values())
+		{
+			if (flag.toString().toLowerCase().equals(str))
+			{
+				return flag;
+			}
+		}
+		return EFlag.NONE;
 	}
 }

@@ -112,21 +112,48 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mPreferences = //getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 						PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
 
+
+		//mPreferences.edit().clear().commit();
+		//getActivity().getBaseContext().getSharedPreferences("preferences", 0).edit().clear().commit();
 		// Set up the flags
-		Set<String> prefFlags = mPreferences.getStringSet("pref_default_flag_list", null);
+
+
+		Set<String> prefFlags = mPreferences.getStringSet("pref_flag_list", null);
 		if (prefFlags != null)
 		{
-			for (String s: prefFlags)
+			if (!prefFlags.isEmpty())
 			{
-				EFlag flag = EFlag.toType(s.charAt(0));
-				if (flag != EFlag.NONE)
+				/*
+					These are the values in arrays.xml
+				 */
+				for (String s : prefFlags)
 				{
-					mFlags.add(flag);
+					Log.d(TAG, "Found pref flag: " + s);
+					EFlag flag = EFlag.fromChar(s.charAt(0));
+					if (flag != EFlag.NONE)
+					{
+						Log.d(TAG, "Adding pref flag: " + flag.toString());
+						mFlags.add(flag);
+					}
 				}
 			}
+			else
+			{
+				Log.e(TAG, "pref flag is empty!");
+			}
+		}
+		else
+		{
+			Log.e(TAG, "pref flag is null! Using hardcoded defaults");
+			mFlags.add(EFlag.CONTINUOUS);
+			mFlags.add(EFlag.VOLTAGE);
+			mFlags.add(EFlag.CURRENT);
+			mFlags.add(EFlag.AVERAGE);
+			mFlags.add(EFlag.SWEEP);
 		}
 
-			// Set up the UI
+
+		// Set up the UI
 		btnConnect = (Button) view.findViewById(R.id.btn_connect);
 		btnWriteToFile = (Button) view.findViewById(R.id.btn_to_file);
 		btnEmail = (Button) view.findViewById(R.id.btn_email);
@@ -247,6 +274,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			public void onClick(View v)
 			{
 				txtReceived.setText("");
+				lblVoc.setText("");
+				lblIsc.setText("");
 				mGraph.reset();
 				mDataSet.clear();
 			}
@@ -595,6 +624,20 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 							}
 						}
 					}
+				}
+				if (jObj.has("O"))
+				{
+					Log.d(TAG, "VOC found");
+					lblVoc.setEnabled(true);
+					lblVoc.setText("Voc: " + Double.toString(jObj.getDouble("VOC")));
+					Log.d(TAG, "VOC: " + jObj.getDouble("VOC"));
+				}
+				if (jObj.has("U"))
+				{
+					Log.d(TAG, "ISC found");
+					lblIsc.setEnabled(true);
+					lblIsc.setText("Isc: " + Double.toString(jObj.getDouble("ISC")));
+					Log.d(TAG, "ISC: " + jObj.getDouble("ISC"));
 				}
 				if (jObj.has("E"))
 				{

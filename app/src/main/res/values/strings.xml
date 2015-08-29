@@ -31,6 +31,6 @@
 	<string name="pref_auto_save_files_check_summary">Automatically saves graphs and data files after measurement</string>
 
 	<string name="pref_measurement_title">Measurements</string>
-	<string name="pref_default_flag_title">Default Measurements</string>
-	<string name="pref_default_flag_summary">Set the quantities to measure by default</string>
+	<string name="pref_flag_title">Default Measurements</string>
+	<string name="pref_flag_summary">Set the quantities to measure by default</string>
 </resources>

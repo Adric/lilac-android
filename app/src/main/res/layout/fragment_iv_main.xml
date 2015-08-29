@@ -89,8 +89,8 @@
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:id="@+id/lbl_voc"
-		android:layout_below="@+id/iv_curve"
-		android:layout_alignEnd="@+id/iv_curve"/>
+		android:layout_below="@+id/btn_clear"
+		android:layout_alignEnd="@+id/btn_clear"/>
 
 	<TextView
 		android:layout_width="wrap_content"
