@@ -281,11 +281,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			public void onClick(View v)
 			{
-				txtReceived.setText("");
-				lblVoc.setText("Voc: ");
-				lblIsc.setText("Isc: ");
-				mGraph.reset();
-				mDataSet.clear();
+				clearUI();
 			}
 		});
 
@@ -846,6 +842,15 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			}
 		}
 		return EDataSeparator.TAB;
+	}
+
+	private void clearUI()
+	{
+		if (txtReceived != null) txtReceived.setText("");
+		if (lblVoc != null) lblVoc.setText("Voc: ");
+		if (lblIsc != null) lblIsc.setText("Isc: ");
+		if (mGraph != null) mGraph.reset();
+		if (mDataSet != null) mDataSet.clear();
 	}
 }
 
