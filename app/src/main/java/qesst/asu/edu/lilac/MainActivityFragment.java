@@ -673,8 +673,16 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private void saveFile()
 	{
 		// Create filename
-		// TODO: add preferences to check for local enum between .txt and .csv
-		String filename = mFilenameBase + ".txt";
+		String filename = mFilenameBase;
+		EDataSeparator separator = getSeparator();
+		if (separator == EDataSeparator.COMMA)
+		{
+			filename += ".csv";
+		}
+		else
+		{
+			filename += ".txt";
+		}
 
 		// Try to write to SDcard
 		if (canWriteOnExternalStorage())
@@ -692,7 +700,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				return;
 			}
 
-			ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.TAB);
+			ArrayList<String> data = mDataSet.getStringsForFile(separator);
 			try
 			{
 				FileOutputStream out = new FileOutputStream(file + File.separator + filename);
@@ -786,7 +794,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 		// TODO: add preference for either emailing the data as an attachment or as the email body
 		String text = "";
-		ArrayList<String> data = mDataSet.getStringsForFile(ModuleDataSet.EDataSeparator.COMMA);
+		ArrayList<String> data = mDataSet.getStringsForFile(getSeparator());
 		for (String s: data)
 		{
 			text += s + "\n";
@@ -825,6 +833,19 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			ex.printStackTrace();
 		}
+	}
+
+	private EDataSeparator getSeparator()
+	{
+		if (mPreferences != null)
+		{
+			String sep = mPreferences.getString("pref_file_data_separator", null); // no guarantee
+			if ((sep != null) && sep.contains("Comma Value"))
+			{
+				return EDataSeparator.COMMA;
+			}
+		}
+		return EDataSeparator.TAB;
 	}
 }
 

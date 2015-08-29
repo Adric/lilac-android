@@ -12,24 +12,6 @@ public class ModuleDataSet
 {;
 	private ArrayList<ModuleDataEntry> mModuleDataEntries = new ArrayList<ModuleDataEntry>();
 
-	public enum EDataSeparator
-	{
-		COMMA(","),
-		TAB("\t")
-		;
-
-		private String val;
-		EDataSeparator(String val)
-		{
-			this.val = val;
-		}
-
-		public String get()
-		{
-			return val;
-		}
-	}
-
 	public ModuleDataSet()
 	{
 	}
