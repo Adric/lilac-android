@@ -63,4 +63,13 @@
 			android:defaultValue="@array/pref_flag_values_default">
 		</MultiSelectListPreference>
 	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/pref_general"
+		android:key="pref_key_general">
+		<Preference
+			android:key="pref_key_reset"
+			android:summary="@string/pref_reset_summary"
+			android:title="@string/pref_reset_title">
+		</Preference>
+	</PreferenceCategory>
 </PreferenceScreen>

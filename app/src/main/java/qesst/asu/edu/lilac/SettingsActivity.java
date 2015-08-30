@@ -1,8 +1,11 @@
 package qesst.asu.edu.lilac;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -12,9 +15,11 @@ import android.preference.PreferenceManager;
  */
 public class SettingsActivity extends PreferenceActivity
 {
+	// Keep in sync with preferences.xml
 	private static final String PREF_NAME = "pref_custom_name_string";
 	private static final String PREF_MAC = "pref_custom_mac_string";
-	
+	private static final String PREF_RESET = "pref_key_reset";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -33,9 +38,45 @@ public class SettingsActivity extends PreferenceActivity
 			addPreferencesFromResource(R.xml.preferences);
 
 			// Change the summary text to any saved values if we have them
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+			final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
 			onSharedPreferenceChanged(sharedPreferences, PREF_NAME);
 			onSharedPreferenceChanged(sharedPreferences, PREF_MAC);
+
+			// Reset all preferences option
+			Preference prefReset = (Preference) findPreference(PREF_RESET);
+			prefReset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+			{
+				public boolean onPreferenceClick(Preference preference)
+				{
+					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+					builder.setTitle(R.string.confirm_title);
+					builder.setMessage(R.string.confirm_message);
+					builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int which)
+						{
+							// Reset all preferences
+							sharedPreferences.edit().clear().commit();
+							PreferenceManager.setDefaultValues(getActivity().getBaseContext(), R.xml.preferences, true);
+
+							// Refresh the activity
+							getActivity().finish();
+							startActivity(getActivity().getIntent());
+
+							dialog.dismiss();
+						}
+					});
+					builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int which)
+						{
+							dialog.dismiss();
+						}
+					});
+					builder.create().show();
+					return true;
+				}
+			});
 		}
 
 		@Override
@@ -55,7 +96,7 @@ public class SettingsActivity extends PreferenceActivity
 		}
 
 		@Override
-		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key)
 		{
 			if (key.equals(PREF_NAME) || key.equals(PREF_MAC))
 			{

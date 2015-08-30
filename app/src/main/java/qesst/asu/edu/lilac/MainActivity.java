@@ -21,6 +21,9 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
 		setContentView(R.layout.activity_main);
 
 		/*
@@ -74,8 +77,6 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 			// Commit the transaction
 			transaction.commit();
 			*/
-
-			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 			Intent i = new Intent(this, SettingsActivity.class);
 			startActivity(i);
