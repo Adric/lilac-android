@@ -2,6 +2,7 @@ package qesst.asu.edu.lilac;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -59,9 +60,13 @@ public class SettingsActivity extends PreferenceActivity
 							sharedPreferences.edit().clear().commit();
 							PreferenceManager.setDefaultValues(getActivity().getBaseContext(), R.xml.preferences, true);
 
-							// Refresh the activity
+							// Refresh the activity without any window animation
+							Intent intent = getActivity().getIntent();
+							intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+							getActivity().overridePendingTransition(0, 0);
 							getActivity().finish();
-							startActivity(getActivity().getIntent());
+							getActivity().overridePendingTransition(0, 0);
+							startActivity(intent);
 
 							dialog.dismiss();
 						}
