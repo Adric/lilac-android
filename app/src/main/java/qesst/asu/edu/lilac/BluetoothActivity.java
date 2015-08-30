@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -20,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by amovi_000 on 8/18/2015.
+ * Controls the Bluetooth connection
  */
 public class BluetoothActivity extends Activity
 {
@@ -31,7 +32,6 @@ public class BluetoothActivity extends Activity
 
 	// MAC-address of Bluetooth module (default)
 	private String mAddress = "30:14:09:03:01:86";
-	private Handler mHandler = null;
 	// Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Bluetooth socket
@@ -39,8 +39,7 @@ public class BluetoothActivity extends Activity
 	// Bluetooth device used for connections
 	private BluetoothDevice mDevice = null;
 	// List of possible devices
-	ArrayList<String> mArrayAdapter = new ArrayList<String>();;
-	//private boolean mBTConnected;
+	ArrayList<String> mArrayAdapter = new ArrayList<String>();
 
 	// Threaded message system
 	private MessageSystem3 mMessageSystem = null;
@@ -48,7 +47,6 @@ public class BluetoothActivity extends Activity
 	public BluetoothActivity(Activity activity)
 	{
 		mParentActivity = activity;
-		//mBTConnected = false;
 	}
 
 	public BluetoothActivity(Fragment fragment)
@@ -66,7 +64,8 @@ public class BluetoothActivity extends Activity
 		if (mBluetoothAdapter == null)
 		{
 			// Device does not support Bluetooth
-			//exitWithError("Fatal Error", "Bluetooth is not supported on this device"); //TODO: translate
+			Log.e(TAG, getString(R.string.bluetooth_not_supported));
+			Toast.makeText(getBaseContext(), getString(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -278,17 +277,20 @@ public class BluetoothActivity extends Activity
 		{
 			mBluetoothSocket = device.createRfcommSocketToServiceRecord(Constants.MY_UUID);
 		}
-		catch (IOException e)
+		catch (IOException ioe)
 		{
-			//exitWithError("Fatal Error", "RFComm Socket create failed: " + e.getMessage() + ".");
+			Log.e(TAG, getString(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage());
+			Toast.makeText(getBaseContext(), getString(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+
 			// If unable to create an RFComm socket, try the more generic way
 			try
 			{
 				mBluetoothSocket = createBluetoothSocket(device);
 			}
-			catch (IOException e2)
+			catch (IOException ioe2)
 			{
-				//exitWithError("Fatal Error", "Create BluetoothSocket failed: " + e2.getMessage());
+				Log.e(TAG, getString(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage());
+				Toast.makeText(getBaseContext(), getString(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -303,13 +305,6 @@ public class BluetoothActivity extends Activity
 		{
 			mBluetoothSocket.connect();
 			Log.d(TAG, "Connected!");
-			//txtReceived.append("Bluetooth Connected!\n");
-			//mBTConnected = true;
-
-			//
-
-			// Enable Bluetooth UI
-			//toggleBTUI(true);
 		}
 		catch (IOException e)
 		{
@@ -321,7 +316,8 @@ public class BluetoothActivity extends Activity
 			}
 			catch (IOException e2)
 			{
-				//exitWithError("Fatal Error", "Unable to close BluetoothSocket: " + e2.getLocalizedMessage());
+				Log.e(TAG, getString(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage());
+				Toast.makeText(getBaseContext(), getString(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
 
