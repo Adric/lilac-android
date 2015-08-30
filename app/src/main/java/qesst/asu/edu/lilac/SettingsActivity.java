@@ -106,12 +106,12 @@ public class SettingsActivity extends PreferenceActivity
 				{
 					if (key.equals(PREF_NAME))
 					{
-						editTextPreference.setText(getString(R.string.pref_custom_name_hint));
+						editTextPreference.setText("");
 						editTextPreference.setSummary(getString(R.string.pref_custom_name_hint));
 					}
 					else if (key.equals(PREF_MAC))
 					{
-						editTextPreference.setText(getString(R.string.pref_custom_mac_hint));
+						editTextPreference.setText("");
 						editTextPreference.setSummary(getString(R.string.pref_custom_mac_hint));
 					}
 				}
