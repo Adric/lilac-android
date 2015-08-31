@@ -88,7 +88,7 @@ public class GraphView
 		mChart.setData(data);
 	}
 	
-	public void updateGraph(ModuleDataEntry entry)
+	public void updateGraph(ModuleData md)
 	{
 		if (mView == null)
 		{
@@ -122,11 +122,11 @@ public class GraphView
 			}
 
 			// If current drops below 0, stop and return
-			/*if (entry.getCurrent() <= 0.f)
+			/*if (md.getCurrent() <= 0.f)
 			{
 				if (!mEndMeasurement)
 				{
-					Log.e(TAG, "Trying to add negative current to graph: " + entry.getCurrent() + ", sending 'E' back to Arduino and skipping");
+					Log.e(TAG, "Trying to add negative current to graph: " + md.getCurrent() + ", sending 'E' back to Arduino and skipping");
 					//mMessageSystem.write('C');
 
 					mMessageSystem.write('E');
@@ -139,16 +139,16 @@ public class GraphView
 			// create formatter for appropriate x labels
 			/*DecimalFormat df = new DecimalFormat("#.###");
 			df.setRoundingMode(RoundingMode.CEILING);
-			float xVal = Float.valueOf(df.format(entry.getCurrent()));*/
+			float xVal = Float.valueOf(df.format(md.getCurrent()));*/
 			// use valueformatter class instead
 
 			// add a new x-value first
-			//if (mVoc < entry.getVoltage()) mVoc = (float)entry.getVoltage();
+			//if (mVoc < md.getVoltage()) mVoc = (float)md.getVoltage();
 
-			data.addXValue(Double.toString(entry.getVoltage()));
-			Log.d(TAG, "Adding values: (" + Double.toString(entry.getVoltage()) + ", " + entry.getCurrent() + ")");
+			data.addXValue(Double.toString(md.getVoltage()));
+			Log.d(TAG, "Adding values: (" + Double.toString(md.getVoltage()) + ", " + md.getCurrent() + ")");
 
-			data.addEntry(new Entry((float)entry.getCurrent(), set.getEntryCount()), 0);
+			data.addEntry(new Entry((float)md.getCurrent(), set.getEntryCount()), 0);
 
 			// let the chart know it's data has changed
 			mChart.notifyDataSetChanged();

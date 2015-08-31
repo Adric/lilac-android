@@ -10,50 +10,50 @@ import java.util.ArrayList;
  */
 public class ModuleDataSet
 {;
-	private ArrayList<ModuleDataEntry> mModuleDataEntries = new ArrayList<ModuleDataEntry>();
+	private ArrayList<ModuleData> mModuleData = new ArrayList<ModuleData>();
 
 	public ModuleDataSet()
 	{
 	}
 
-	public ModuleDataSet(ArrayList<ModuleDataEntry> dataEntries)
+	public ModuleDataSet(ArrayList<ModuleData> data)
 	{
-		add(dataEntries);
+		add(data);
 	}
 
-	public ModuleDataSet(ModuleDataEntry moduleData)
+	public ModuleDataSet(ModuleData moduleData)
 	{
 		add(moduleData);
 	}
 
-	public void add(ModuleDataEntry moduleData)
+	public void add(ModuleData moduleData)
 	{
-		mModuleDataEntries.add(moduleData);
+		mModuleData.add(moduleData);
 	}
 
-	public void add(ArrayList<ModuleDataEntry> dataEntries)
+	public void add(ArrayList<ModuleData> data)
 	{
-		if (dataEntries != null)
+		if (data != null)
 		{
-			for (int i = 0; i < dataEntries.size(); ++i)
+			for (int i = 0; i < data.size(); ++i)
 			{
-				if (dataEntries.get(i) != null)
+				if (data.get(i) != null)
 				{
-					mModuleDataEntries.add(dataEntries.get(i));
+					mModuleData.add(data.get(i));
 				}
 			}
 		}
 	}
 
 	// doesn't work
-	public void remove(ModuleDataEntry moduleData)
+	public void remove(ModuleData moduleData)
 	{
-		mModuleDataEntries.remove(moduleData);
+		mModuleData.remove(moduleData);
 	}
 
 	public void remove(double value, EFlag type)
 	{
-		search: for (ModuleDataEntry entry : mModuleDataEntries)
+		search: for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -86,17 +86,17 @@ public class ModuleDataSet
 
 	public int size()
 	{
-		return mModuleDataEntries.size();
+		return mModuleData.size();
 	}
 
-	public ModuleDataEntry get(int index)
+	public ModuleData get(int index)
 	{
-		if (index < 0 || index >= mModuleDataEntries.size())
+		if (index < 0 || index >= mModuleData.size())
 		{
 			// TODO: throw an exception
 			return null;
 		}
-		return mModuleDataEntries.get(index);
+		return mModuleData.get(index);
 	}
 
 	double getStdev(EFlag type)
@@ -107,7 +107,7 @@ public class ModuleDataSet
 		// Get the variance
 		int count = 0;
 		double variance = 0;
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -151,7 +151,7 @@ public class ModuleDataSet
 	{
 		int count = 0;
 		double sum = 0;
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -188,7 +188,7 @@ public class ModuleDataSet
 	public ArrayList<Double> getData(EFlag type)
 	{
 		ArrayList<Double> data = new ArrayList<Double>();
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -221,7 +221,7 @@ public class ModuleDataSet
 	{
 		try
 		{
-			ModuleDataEntry entry = get(index);
+			ModuleData entry = get(index);
 			if (entry == null) return null;
 
 			switch(type)
@@ -260,7 +260,7 @@ public class ModuleDataSet
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 
 		int count = 0;
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -298,7 +298,7 @@ public class ModuleDataSet
 		ArrayList<String> strings = new ArrayList<String>();
 
 		int count = 0;
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			switch(type)
 			{
@@ -341,7 +341,7 @@ public class ModuleDataSet
 		boolean has_voltage = false;
 		boolean has_current = false;
 		boolean has_temp = false;
-		for (ModuleDataEntry entry : mModuleDataEntries)
+		for (ModuleData entry : mModuleData)
 		{
 			String str = "";
 			if (entry.hasTime())
@@ -417,11 +417,11 @@ public class ModuleDataSet
 
 	public boolean isEmpty()
 	{
-		return mModuleDataEntries.isEmpty();
+		return mModuleData.isEmpty();
 	}
 
 	public void clear()
 	{
-		mModuleDataEntries.clear();
+		mModuleData.clear();
 	}
 }

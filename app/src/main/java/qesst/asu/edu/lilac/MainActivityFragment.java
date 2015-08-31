@@ -518,31 +518,31 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				// TODO: Ugly parsing, refactor!
 				JSONObject jObj = new JSONObject(str);
-				ModuleDataEntry mde = new ModuleDataEntry();
+				ModuleData md = new ModuleData();
 				boolean add = false;
 				if (jObj.has("V"))
 				{
 					Log.d(TAG, "V found");
 					add = true;
-					mde.setVoltage(jObj.getDouble("V"));
+					md.setVoltage(jObj.getDouble("V"));
 				}
 				if (jObj.has("I"))
 				{
 					Log.d(TAG, "I found");
 					add = true;
-					mde.setCurrent(jObj.getDouble("I"));
+					md.setCurrent(jObj.getDouble("I"));
 				}
 				if (jObj.has("T"))
 				{
 					Log.d(TAG, "T found");
 					add = true;
-					mde.setTemp(jObj.getDouble("T"));
+					md.setTemp(jObj.getDouble("T"));
 				}
 				if (jObj.has("t"))
 				{
 					add = true;
 					Log.d(TAG, "t found");
-					mde.setTime(jObj.getLong("t"));
+					md.setTime(jObj.getLong("t"));
 				}
 				if (jObj.has("G"))
 				{
@@ -604,8 +604,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				}
 				if (add)
 				{
-					Log.d(TAG, "Adding mde: " + mde.toString());
-					mDataSet.add(mde);
+					Log.d(TAG, "Adding md: " + md.toString());
+					mDataSet.add(md);
 				}
 			}
 			catch (Exception e)
@@ -623,11 +623,11 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	public void updateGraph()
 	{
-		ModuleDataEntry entry = null;
+		ModuleData data = null;
 		if (mUseDummyData)
 		{
-			entry = mDummyData.getNextEntry();
-			mDataSet.add(entry); // For UI enabling, etc
+			data = mDummyData.getNextEntry();
+			mDataSet.add(data); // For UI enabling, etc
 		}
 		else
 		{
@@ -636,9 +636,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				Log.e(TAG, "Trying to update graph with an empty dataset! Returning!");
 				return;
 			}
-			entry = mDataSet.get(mDataSet.size()-1);
+			data = mDataSet.get(mDataSet.size()-1);
 		}
-		mGraph.updateGraph(entry);
+		mGraph.updateGraph(data);
 
 		// Make sure all our UI data buttons are enabled
 		// if we're going to be continuously updating
