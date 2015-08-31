@@ -56,35 +56,14 @@ public class MainActivity extends FragmentActivity //extends AppCompatActivity
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings)
 		{
-			//Intent i = new Intent(this, SettingsActivity.class);
-			//startActivityForResult(i, 1);
-
-			// Display the fragment as the main content.
-			/*
-			getFragmentManager().beginTransaction()
-			                    .replace(R.id.content_fragment, new SettingsFragment())
-			                    .commit();
-			*/
-
-			/*
-			FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-			// Replace whatever is in the fragment_container view with this fragment,
-			// and add the transaction to the back stack so the user can navigate back
-			transaction.replace(R.id.content_fragment, new SettingsFragment());
-			transaction.addToBackStack(null);
-
-			// Commit the transaction
-			transaction.commit();
-			*/
-
 			Intent i = new Intent(this, SettingsActivity.class);
 			startActivity(i);
-
 			return true;
 		}
 		else if (id == R.id.about)
 		{
+			Intent i = new Intent(this, AboutActivity.class);
+			startActivity(i);
 			return true;
 		}
 
