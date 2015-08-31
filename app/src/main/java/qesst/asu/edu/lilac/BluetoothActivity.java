@@ -24,13 +24,15 @@ import java.util.UUID;
  */
 public class BluetoothActivity extends Activity
 {
-	private final String TAG = "BluetoothActivity";
+	private final static String TAG = "BluetoothActivity";
 
 	private Activity mParentActivity = null;
 	private Fragment mParentFragment = null;
 
 	// MAC-address of Bluetooth module (default)
 	private String mAddress = "30:14:09:03:01:86";
+	// Device name
+	private String mDeviceName = Constants.DEVICE_NAME;
 	// Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Bluetooth socket
@@ -69,11 +71,11 @@ public class BluetoothActivity extends Activity
 		}
 
 		/*
-		If this method returns false, then Bluetooth is disabled.
-		To request that Bluetooth be enabled, call startActivityForResult()
-		with the ACTION_REQUEST_ENABLE action Intent.
-		This will issue a request to enable Bluetooth through the system settings
-		(without stopping your application)
+			If this method returns false, then Bluetooth is disabled.
+			To request that Bluetooth be enabled, call startActivityForResult()
+			with the ACTION_REQUEST_ENABLE action Intent.
+			This will issue a request to enable Bluetooth through the system settings
+			(without stopping your application)
 		 */
 		if (!mBluetoothAdapter.isEnabled())
 		{
@@ -96,6 +98,7 @@ public class BluetoothActivity extends Activity
 	public void disconnect()
 	{
 		mBluetoothAdapter = null;
+
 		// Bluetooth socket
 		try
 		{
@@ -110,8 +113,6 @@ public class BluetoothActivity extends Activity
 
 		// Bluetooth device used for connections
 		mDevice = null;
-
-		//mBTConnected = false;
 
 		// Threaded message system
 		mMessageSystem = null;
@@ -204,9 +205,9 @@ public class BluetoothActivity extends Activity
 
 				// if the name matches the one we're looking for, store the mac address
 				// TODO: set default name in preferences
-				if (device.getName().toLowerCase().contains(Constants.BT_DEVICE_NAME))
+				if (device.getName().toLowerCase().contains(mDeviceName))
 				{
-					Log.e(TAG, Constants.BT_DEVICE_NAME + ", address: " + mac_address[0]);
+					Log.e(TAG, mDeviceName + ", address: " + mac_address[0]);
 				}
 				else
 				{
@@ -238,9 +239,9 @@ public class BluetoothActivity extends Activity
 						// Add the name and address to an array adapter to show in a ListView
 						mArrayAdapter.add(device.getName() + "\n" + mac_address[0]);
 
-						if (device.getName().toLowerCase().contains(Constants.BT_DEVICE_NAME))
+						if (device.getName().toLowerCase().contains(mDeviceName))
 						{
-							Log.e(TAG, Constants.BT_DEVICE_NAME + ", address: " + mac_address[0]);
+							Log.e(TAG, mDeviceName + ", address: " + mac_address[0]);
 						}
 						else
 						{
