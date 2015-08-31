@@ -26,6 +26,8 @@
 	<string name="bluetooth_socket_create_failed">Create Bluetooth socket failed</string>
 	<string name="bluetooth_socket_close_failed">Unable to close Bluetooth socket</string>
 
+	<string name="flag_update_failed">Unable to update flags!</string>
+
 	<string name="pref_connection_title">Connection</string>
 	<string name="pref_custom_name_check">Custom Device Name</string>
 	<string name="pref_custom_name_summary">Must be no more than 20 characters long</string>

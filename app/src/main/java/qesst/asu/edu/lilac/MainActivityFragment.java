@@ -70,6 +70,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	private ArrayList<MenuItem> mFlagMenuItems;
 
+	// Number of times to attempt to retry sending flag updates
+	private int mRetryCount = 0;
+	private final int RETRY_COUNT_MAX = 2; // three retries
+
 	// UI
 	private Button btnConnect = null;
 	private Button btnMeasure = null;
@@ -567,6 +571,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					Log.d(TAG, "F found");
 					if (jObj.getBoolean("F"))
 					{
+						mRetryCount = 0;
 						Log.d(TAG, "Flag update successful!");
 					}
 					else
@@ -580,6 +585,18 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 							{
 								Log.d(TAG, "Failed to update flags (string): " + flag.toString());
 							}
+							Log.d(TAG, "Retry count: " + mRetryCount);
+						}
+
+						if (mRetryCount < RETRY_COUNT_MAX)
+						{
+							mRetryCount++;
+							mBluetooth.write(EFlag.toJsonString(mFlags));
+						}
+						else
+						{
+							Toast.makeText(getActivity().getBaseContext(), getString(R.string.flag_update_failed), Toast.LENGTH_SHORT);
+							mRetryCount = 0;
 						}
 					}
 				}
