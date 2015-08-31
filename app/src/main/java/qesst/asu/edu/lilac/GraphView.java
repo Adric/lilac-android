@@ -15,21 +15,23 @@ import com.github.mikephil.charting.utils.ValueFormatter;
 
 import java.text.DecimalFormat;
 
-
-class IVFormatter implements ValueFormatter
+// TODO: figure out why this isn't working
+/*class IVFormatter implements ValueFormatter
 {
 
 	private DecimalFormat mFormat;
 
-	public IVFormatter() {
+	public IVFormatter()
+	{
 		mFormat = new DecimalFormat("###,###,##0.0"); // use one decima
 	}
 
 	@Override
-	public String getFormattedValue(float value) {
+	public String getFormattedValue(float value)
+	{
 		return mFormat.format(value) + " $"; // append a dollar-sign
 	}
-}
+}*/
 
 
 /**
