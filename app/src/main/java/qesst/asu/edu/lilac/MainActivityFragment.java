@@ -763,14 +763,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	public void saveImage()
 	{
 		String filename = mFilenameBase + ".jpg";
-		if (mGraph.saveToGallery(filename, 100))
-		{
-			Toast.makeText(getActivity(), "Saving " + filename + " successful!", Toast.LENGTH_SHORT).show();
-		}
-		else
-		{
-			Toast.makeText(getActivity(), "Saving " + filename + " failed!", Toast.LENGTH_SHORT).show();
-		}
+		String state = (mGraph.saveToGallery(filename, 100)) ?
+		               "successful!" : "failed!";
+		Toast.makeText(getActivity(), "Saving " + filename + " " + state, Toast.LENGTH_SHORT).show();
 	}
 
 	public void emailData()
@@ -784,7 +779,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		Intent email = new Intent(Intent.ACTION_SEND);
 		email.putExtra(Intent.EXTRA_EMAIL, "Receiver Email Address");
 		email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 		String subject = mFilenameBase;
 		email.putExtra(Intent.EXTRA_SUBJECT, subject);
 
