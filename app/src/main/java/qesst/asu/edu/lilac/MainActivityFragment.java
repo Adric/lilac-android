@@ -31,8 +31,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
@@ -438,7 +441,23 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			// If anything was changed, send the change
 			if (old_flag_count != mFlags.size())
 			{
+				// Update the Arduino
 				mBluetooth.write(EFlag.toJsonString(mFlags));
+
+				// Update the preference
+				// The strange usage is to work around a bug in Android:
+				// https://code.google.com/p/android/issues/detail?id=27801
+				Set<String> prefFlags = mPreferences.getStringSet("pref_flag_list", null);
+				if (prefFlags != null)
+				{
+					HashSet<String> prefFlagsCopy = new HashSet<String>(prefFlags);
+					for (EFlag flag : mFlags)
+					{
+						prefFlagsCopy.add(""+flag.toChar());
+						Log.d(TAG, "Adding pref flag from menu: " + flag.toChar());
+					}
+					mPreferences.edit().putStringSet("pref_flag_list", prefFlagsCopy).commit();
+				}
 				return true;
 			}
 		}
