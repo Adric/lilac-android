@@ -669,16 +669,10 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private void saveFile()
 	{
 		// Create filename
-		String filename = mFilenameBase;
 		EDataSeparator separator = getSeparator();
-		if (separator == EDataSeparator.COMMA)
-		{
-			filename += ".csv";
-		}
-		else
-		{
-			filename += ".txt";
-		}
+		String filename = (separator == EDataSeparator.COMMA) ?
+		                  mFilenameBase + ".csv" :
+	                      mFilenameBase + ".txt";
 
 		// Try to write to SDcard
 		if (canWriteOnExternalStorage())
