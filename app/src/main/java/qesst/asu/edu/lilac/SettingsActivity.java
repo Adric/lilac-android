@@ -17,8 +17,8 @@ import android.preference.PreferenceManager;
 public class SettingsActivity extends PreferenceActivity
 {
 	// Keep in sync with preferences.xml
-	private static final String PREF_NAME = "pref_custom_name_string";
-	private static final String PREF_MAC = "pref_custom_mac_string";
+	private static final String PREF_NAME = "pref_key_custom_name_string";
+	private static final String PREF_MAC = "pref_key_custom_mac_string";
 	private static final String PREF_RESET = "pref_key_reset";
 
 	@Override

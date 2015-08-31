@@ -129,7 +129,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		// Set up the flags
 
 
-		Set<String> prefFlags = mPreferences.getStringSet("pref_flag_list", null);
+		Set<String> prefFlags = mPreferences.getStringSet("pref_key_flag_list", null);
 		if (prefFlags != null)
 		{
 			if (!prefFlags.isEmpty())
@@ -265,7 +265,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					// Make sure all our UI data buttons are enabled
 					toggleBTUI(!mDataSet.isEmpty());
 
-					if (mPreferences.getBoolean("pref_auto_save_files_check", false))
+					if (mPreferences.getBoolean("pref_key_auto_save_files_check", false))
 					{
 						saveFile();
 						saveImage();
@@ -447,7 +447,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				// Update the preference
 				// The strange usage is to work around a bug in Android:
 				// https://code.google.com/p/android/issues/detail?id=27801
-				Set<String> prefFlags = mPreferences.getStringSet("pref_flag_list", null);
+				Set<String> prefFlags = mPreferences.getStringSet("pref_key_flag_list", null);
 				if (prefFlags != null)
 				{
 					HashSet<String> prefFlagsCopy = new HashSet<String>(prefFlags);
@@ -456,7 +456,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 						prefFlagsCopy.add(""+flag.toChar());
 						Log.d(TAG, "Adding pref flag from menu: " + flag.toChar());
 					}
-					mPreferences.edit().putStringSet("pref_flag_list", prefFlagsCopy).commit();
+					mPreferences.edit().putStringSet("pref_key_flag_list", prefFlagsCopy).commit();
 				}
 				return true;
 			}
@@ -705,7 +705,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private void saveFile()
 	{
 		// Create filename
-		EDataSeparator separator = getSeparator();
+		EDataSeparator separator = getSeparator(false);
 		String filename = (separator == EDataSeparator.COMMA) ?
 		                  mFilenameBase + ".csv" :
 	                      mFilenameBase + ".txt";
@@ -814,7 +814,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 		// TODO: add preference for either emailing the data as an attachment or as the email body
 		String text = "";
-		ArrayList<String> data = mDataSet.getStringsForFile(getSeparator());
+		ArrayList<String> data = mDataSet.getStringsForFile(getSeparator(true));
 		for (String s: data)
 		{
 			text += s + "\n";
@@ -855,11 +855,12 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		}
 	}
 
-	private EDataSeparator getSeparator()
+	private EDataSeparator getSeparator(boolean email)
 	{
 		if (mPreferences != null)
 		{
-			String sep = mPreferences.getString("pref_file_data_separator", null); // no guarantee
+			String sep = (email) ? mPreferences.getString("pref_key_email_data_separator", null) :
+			             mPreferences.getString("pref_key_file_data_separator", null);
 			if ((sep != null) && sep.contains("Comma Value"))
 			{
 				return EDataSeparator.COMMA;

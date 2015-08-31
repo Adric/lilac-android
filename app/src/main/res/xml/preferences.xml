@@ -4,25 +4,25 @@
 		android:title="@string/pref_connection_title"
 		android:key="pref_key_connection_settings">
 		<CheckBoxPreference
-			android:key="pref_custom_name_check"
+			android:key="pref_key_custom_name_check"
 		    android:title="@string/pref_custom_name_check"
 		    android:summary="@string/pref_custom_name_summary"
 			android:defaultValue="false" />
 		<EditTextPreference
-			android:dependency="pref_custom_name_check"
-			android:key="pref_custom_name_string"
+			android:dependency="pref_key_custom_name_check"
+			android:key="pref_key_custom_name_string"
 			android:hint="@string/pref_custom_name_hint"
 			android:summary="@string/pref_custom_name_hint"
 		    android:maxLines="1"
 		    android:defaultValue="" />
 		<CheckBoxPreference
-			android:key="pref_custom_mac_check"
+			android:key="pref_key_custom_mac_check"
 			android:title="@string/pref_custom_mac_check"
 			android:summary="@string/pref_custom_mac_summary"
 			android:defaultValue="false" />
 		<EditTextPreference
-			android:dependency="pref_custom_mac_check"
-			android:key="pref_custom_mac_string"
+			android:dependency="pref_key_custom_mac_check"
+			android:key="pref_key_custom_mac_string"
 			android:hint="@string/pref_custom_mac_hint"
 			android:summary="@string/pref_custom_mac_hint"
 			android:maxLines="1"
@@ -32,21 +32,21 @@
 		android:title="@string/pref_file_title"
 		android:key="pref_key_file_settings">
 		<ListPreference
-			android:key="pref_file_data_separator"
+			android:key="pref_key_file_data_separator"
 			android:title="@string/pref_file_data_separator_title"
 			android:dialogTitle="@string/pref_file_data_separator_title"
 			android:entries="@array/pref_file_data_separator_entries"
 			android:entryValues="@array/pref_file_data_separator_values"
 			android:defaultValue="@string/pref_file_data_separator_default"/>
 		<ListPreference
-			android:key="pref_email_data_separator"
+			android:key="pref_key_email_data_separator"
 			android:title="@string/pref_email_data_separator_title"
 			android:dialogTitle="@string/pref_email_data_separator_title"
 			android:entries="@array/pref_email_data_separator_entries"
 			android:entryValues="@array/pref_email_data_separator_values"
 			android:defaultValue="@string/pref_email_data_separator_default"/>
 		<CheckBoxPreference
-			android:key="pref_auto_save_files_check"
+			android:key="pref_key_auto_save_files_check"
 			android:title="@string/pref_auto_save_files_check"
 			android:summary="@string/pref_auto_save_files_check_summary"
 			android:defaultValue="false" />
@@ -55,7 +55,7 @@
 		android:title="@string/pref_measurement_title"
 	    android:key="pref_key_measurements">
 		<MultiSelectListPreference
-			android:key="pref_flag_list"
+			android:key="pref_key_flag_list"
 			android:title="@string/pref_flag_title"
 			android:summary="@string/pref_flag_summary"
 			android:entries="@array/pref_flag_entries"
