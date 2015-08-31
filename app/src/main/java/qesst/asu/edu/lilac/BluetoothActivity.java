@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -42,7 +41,7 @@ public class BluetoothActivity extends Activity
 	ArrayList<String> mArrayAdapter = new ArrayList<String>();
 
 	// Threaded message system
-	private MessageSystem3 mMessageSystem = null;
+	private MessageSystem mMessageSystem = null;
 
 	public BluetoothActivity(Activity activity)
 	{
@@ -326,12 +325,12 @@ public class BluetoothActivity extends Activity
 		{
 			if (mParentActivity != null)
 			{
-				mMessageSystem = new MessageSystem3(mParentActivity, mBluetoothSocket);
+				mMessageSystem = new MessageSystem(mParentActivity, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else if (mParentFragment != null)
 			{
-				mMessageSystem = new MessageSystem3(mParentFragment, mBluetoothSocket);
+				mMessageSystem = new MessageSystem(mParentFragment, mBluetoothSocket);
 				mMessageSystem.start();
 			}
 			else

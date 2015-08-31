@@ -3,6 +3,7 @@ package qesst.asu.edu.lilac;
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +14,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
- * Basic threaded message system implementation
+ * JSON-based message system
  */
 public class MessageSystem extends Thread
 {
@@ -42,7 +43,7 @@ public class MessageSystem extends Thread
 		// Assign callback fragment
 		if (fragment != null)
 		{
-			mActivityCallback = (IMessageCallback)fragment;
+			mActivityCallback = (IMessageCallback) fragment;
 		}
 		else
 		{
@@ -57,7 +58,7 @@ public class MessageSystem extends Thread
 		// Assign callback activity
 		if (activity != null)
 		{
-			mActivityCallback = (IMessageCallback)activity;
+			mActivityCallback = (IMessageCallback) activity;
 		}
 		else
 		{
@@ -66,9 +67,19 @@ public class MessageSystem extends Thread
 		init(socket);
 	}
 
-	private void init (BluetoothSocket socket)
+	private void init(BluetoothSocket socket)
 	{
 		if (mActivityCallback == null) return;
+
+		// Pause this thread so that UI thread get some time to breathe
+		try
+		{
+			Thread.sleep(150);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 
 		// Assign socket
 		if (socket != null)
@@ -90,16 +101,21 @@ public class MessageSystem extends Thread
 					case RECEIVE_MESSAGE:
 						byte[] buffer = (byte[]) msg.obj;
 						String message = new String(buffer, 0, msg.arg1);
+						//String message = msg.obj.toString();
+
 						// Fix any formatting errors
 						//message.trim();
 						// Remove any Windows-only linefeeds before appending
 						//message = message.replace(Character.toString('\r'), "");
 						mStringBuilder.append(message);
 
-						// Strip out any leading newlines
-						while (mStringBuilder.indexOf("\n") == 0 || mStringBuilder.indexOf("\r") == 0)
+						// Strip out any leading whitespace chars
+						while (mStringBuilder.indexOf("\n") == 0 ||
+						       mStringBuilder.indexOf("\r") == 0 ||
+						       mStringBuilder.indexOf("\t") == 0 ||
+						       mStringBuilder.indexOf(" ") == 0)
 						{
-							Log.d(TAG, "Deleting EOL char at index 0");
+							Log.d(TAG, "Deleting whitespace char at index 0");
 							Log.d(TAG, "Old mStringBuilder: " + mStringBuilder);
 							mStringBuilder.delete(0, 1);
 							Log.d(TAG, "New mStringBuilder: " + mStringBuilder);
@@ -162,16 +178,6 @@ public class MessageSystem extends Thread
 	 */
 	public void run()
 	{
-		// Pause this thread so that UI thread get some time to breathe.
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-
 		if (mHandler == null)
 		{
 			Log.d(TAG, "\tCalling run() with null Handler!");
@@ -209,7 +215,8 @@ public class MessageSystem extends Thread
 	{
 		Log.d(TAG, "\tWriting: " + message);
 		// Convert into a buffer to write to the output stream
-		byte[] buffer = (message + '\n' + '\0').getBytes();
+		// Need the newline so the arduino knows when the end of the input is
+		byte[] buffer = (message /*+ '\0'*/ + '\n').getBytes();
 		try
 		{
 			mOutputStream.write(buffer);
@@ -220,14 +227,14 @@ public class MessageSystem extends Thread
 		}
 	}
 
-	public void write (char msg)
+	public void write(char msg)
 	{
 		Log.d(TAG, "\tWriting: " + msg);
 		try
 		{
 			mOutputStream.write(msg);
-			mOutputStream.write('\n');
 			mOutputStream.write('\0');
+			mOutputStream.write('\n');
 		}
 		catch (IOException e)
 		{
