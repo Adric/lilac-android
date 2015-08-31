@@ -80,8 +80,14 @@ public class GraphView
 		xAxis.setDrawGridLines(true);
 		mChart.setDoubleTapToZoomEnabled(true);
 		mChart.enableScroll(); // needed?
-		mChart.setExtraBottomOffset(5.f);
-		mChart.setExtraTopOffset(5.f);
+		mChart.setScaleEnabled(true);
+		mChart.setAutoScaleMinMaxEnabled(true);
+		mChart.setDragEnabled(true);
+		mChart.setDragDecelerationEnabled(true);
+		mChart.setPinchZoom(true);
+		mChart.setClickable(true);
+		//mChart.setExtraBottomOffset(5.f);
+		//mChart.setExtraTopOffset(5.f);
 
 		// Add empty data point so we can add more later
 		LineData data = new LineData();
