@@ -1,7 +1,7 @@
 package qesst.asu.edu.lilac;
 
 /**
- * Wrapper for each piece of data
+ * Wrapper for each piece of data so we can check if it exists
  */
 class ModuleDataEntry
 {
