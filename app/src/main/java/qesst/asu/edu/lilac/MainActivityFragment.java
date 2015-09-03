@@ -88,9 +88,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 	private Button btnWriteToFile = null;
 	private Button btnEmail = null;
 	private Button btnScreenshot = null;
-
-	private float mVoc;
-
 	private EnumSet<EFlag> mFlags;
 
 	public MainActivityFragment()
@@ -98,7 +95,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mBluetooth = new BluetoothActivity(this);
 		mFilenames = new ArrayList<String>();
 		mDataSet = new ModuleDataSet();
-		mVoc = 0.f;
 		mCallCount = 0;
 		mFlags = EnumSet.noneOf(EFlag.class);
 		mFlagMenuItems = new ArrayList<MenuItem>();
@@ -625,6 +621,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					lblVoc.setEnabled(true);
 					lblVoc.setText("Voc: " + Double.toString(jObj.getDouble("VOC")));
 					Log.d(TAG, "VOC: " + Double.toString(jObj.getDouble("VOC")));
+					md.setVoc(jObj.getDouble("VOC"));
+					add = true;
 				}
 				if (jObj.has("ISC"))
 				{
@@ -632,6 +630,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 					lblIsc.setEnabled(true);
 					lblIsc.setText("Isc: " + Double.toString(jObj.getDouble("ISC")));
 					Log.d(TAG, "ISC: " + Double.toString(jObj.getDouble("ISC")));
+					md.setIsc(jObj.getDouble("ISC"));
+					add = true;
 				}
 				if (jObj.has("E"))
 				{

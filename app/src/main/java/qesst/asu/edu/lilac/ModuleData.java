@@ -25,6 +25,8 @@ public class ModuleData
 	private ModuleDataEntry mVoltage;
 	private ModuleDataEntry mCurrent;
 	private ModuleDataEntry mTemp;
+	private ModuleDataEntry mVoc;
+	private ModuleDataEntry mIsc;
 	private long mTime;
 
 	public ModuleData()
@@ -32,6 +34,8 @@ public class ModuleData
 		mVoltage = null;
 		mCurrent = null;
 		mTemp = null;
+		mVoc = null;
+		mIsc = null;
 		mTime = 0;
 	}
 
@@ -40,6 +44,8 @@ public class ModuleData
 		mVoltage = null;
 		mCurrent = null;
 		mTemp = null;
+		mVoc = null;
+		mIsc = null;
 		mTime = 0;
 		switch(type)
 		{
@@ -62,6 +68,8 @@ public class ModuleData
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = null;
 		mTemp = null;
+		mVoc = null;
+		mIsc = null;
 		mTime = 0;
 	}
 
@@ -70,6 +78,8 @@ public class ModuleData
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = null;
+		mVoc = null;
+		mIsc = null;
 		mTime = 0;
 	}
 
@@ -78,6 +88,28 @@ public class ModuleData
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
+		mVoc = null;
+		mIsc = null;
+		mTime = 0;
+	}
+
+	public ModuleData(double voltage, double current, double temp, double voc)
+	{
+		mVoltage = new ModuleDataEntry(voltage);
+		mCurrent = new ModuleDataEntry(current);
+		mTemp = new ModuleDataEntry(temp);
+		mVoc = new ModuleDataEntry(voc);
+		mIsc = null;
+		mTime = 0;
+	}
+
+	public ModuleData(double voltage, double current, double temp, double voc, double isc)
+	{
+		mVoltage = new ModuleDataEntry(voltage);
+		mCurrent = new ModuleDataEntry(current);
+		mTemp = new ModuleDataEntry(temp);
+		mVoc = new ModuleDataEntry(voc);
+		mIsc = new ModuleDataEntry(isc);
 		mTime = 0;
 	}
 
@@ -86,14 +118,38 @@ public class ModuleData
 		mVoltage = null;
 		mCurrent = null;
 		mTemp = null;
+		mVoc = null;
+		mIsc = null;
 		mTime = time;
 	}
 
-	public ModuleData(double voltage, double current, double temp, long time)
+	public ModuleData(long time, double voltage, double current, double temp)
 	{
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
+		mVoc = null;
+		mIsc = null;
+		mTime = time;
+	}
+
+	public ModuleData(long time, double voltage, double current, double temp, double voc)
+	{
+		mVoltage = new ModuleDataEntry(voltage);
+		mCurrent = new ModuleDataEntry(current);
+		mTemp = new ModuleDataEntry(temp);
+		mVoc = new ModuleDataEntry(voc);
+		mIsc = null;
+		mTime = time;
+	}
+
+	public ModuleData(long time, double voltage, double current, double temp, double voc, double isc)
+	{
+		mVoltage = new ModuleDataEntry(voltage);
+		mCurrent = new ModuleDataEntry(current);
+		mTemp = new ModuleDataEntry(temp);
+		mVoc = new ModuleDataEntry(voc);
+		mIsc = new ModuleDataEntry(isc);
 		mTime = time;
 	}
 
@@ -117,6 +173,16 @@ public class ModuleData
 		return mTemp != null;
 	}
 
+	public boolean hasVoc()
+	{
+		return mVoc != null;
+	}
+
+	public boolean hasIsc()
+	{
+		return mIsc != null;
+	}
+
 	public void clearVoltage()
 	{
 		mVoltage = null;
@@ -130,6 +196,16 @@ public class ModuleData
 	public void clearTemp()
 	{
 		mTemp = null;
+	}
+
+	public void clearVoc()
+	{
+		mVoc = null;
+	}
+
+	public void clearIsc()
+	{
+		mIsc = null;
 	}
 
 	public double getVoltage()
@@ -163,6 +239,26 @@ public class ModuleData
 	public void setTemp(double temp)
 	{
 		mTemp = new ModuleDataEntry(temp);
+	}
+
+	public ModuleDataEntry getVoc()
+	{
+		return mVoc;
+	}
+
+	public void setVoc(double voc)
+	{
+		mVoc = new ModuleDataEntry(voc);
+	}
+
+	public ModuleDataEntry getIsc()
+	{
+		return mIsc;
+	}
+
+	public void setIsc(double isc)
+	{
+		mIsc = new ModuleDataEntry(isc);
 	}
 
 	public long getTime()
