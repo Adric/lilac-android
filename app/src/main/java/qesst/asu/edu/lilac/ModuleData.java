@@ -20,33 +20,34 @@ class ModuleDataEntry
 /**
  * Class for storing module data
  */
-public class ModuleData
+public class ModuleData implements Cloneable, Comparable<ModuleData>
 {
-	private ModuleDataEntry mVoltage;
-	private ModuleDataEntry mCurrent;
-	private ModuleDataEntry mTemp;
-	private ModuleDataEntry mVoc;
-	private ModuleDataEntry mIsc;
-	private long mTime;
+	private ModuleDataEntry mVoltage = null;
+	private ModuleDataEntry mCurrent = null;
+	private ModuleDataEntry mTemp = null;
+	private ModuleDataEntry mVoc = null;
+	private ModuleDataEntry mIsc = null;
+	private long mTime = 0;
 
 	public ModuleData()
 	{
-		mVoltage = null;
-		mCurrent = null;
-		mTemp = null;
-		mVoc = null;
-		mIsc = null;
-		mTime = 0;
+	}
+
+	public ModuleData(ModuleData md)
+	{
+		if (md != null)
+		{
+			if (md.hasVoltage()) mVoltage = new ModuleDataEntry(md.getVoltage());
+			if (md.hasCurrent()) mCurrent = new ModuleDataEntry(md.getCurrent());
+			if (md.hasTemp()) mTemp = new ModuleDataEntry(md.getTemp());
+			if (md.hasVoc()) mVoc = new ModuleDataEntry(md.getVoc());
+			if (md.hasIsc()) mIsc = new ModuleDataEntry(md.getIsc());
+			if (md.hasTime()) mTime = md.getTime();
+		}
 	}
 
 	public ModuleData(EFlag type, double data)
 	{
-		mVoltage = null;
-		mCurrent = null;
-		mTemp = null;
-		mVoc = null;
-		mIsc = null;
-		mTime = 0;
 		switch(type)
 		{
 			case VOLTAGE:
@@ -66,21 +67,12 @@ public class ModuleData
 	public ModuleData(double voltage)
 	{
 		mVoltage = new ModuleDataEntry(voltage);
-		mCurrent = null;
-		mTemp = null;
-		mVoc = null;
-		mIsc = null;
-		mTime = 0;
 	}
 
 	public ModuleData(double voltage, double current)
 	{
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
-		mTemp = null;
-		mVoc = null;
-		mIsc = null;
-		mTime = 0;
 	}
 
 	public ModuleData(double voltage, double current, double temp)
@@ -88,9 +80,6 @@ public class ModuleData
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
-		mVoc = null;
-		mIsc = null;
-		mTime = 0;
 	}
 
 	public ModuleData(double voltage, double current, double temp, double voc)
@@ -99,8 +88,6 @@ public class ModuleData
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
 		mVoc = new ModuleDataEntry(voc);
-		mIsc = null;
-		mTime = 0;
 	}
 
 	public ModuleData(double voltage, double current, double temp, double voc, double isc)
@@ -110,16 +97,10 @@ public class ModuleData
 		mTemp = new ModuleDataEntry(temp);
 		mVoc = new ModuleDataEntry(voc);
 		mIsc = new ModuleDataEntry(isc);
-		mTime = 0;
 	}
 
 	public ModuleData(long time)
 	{
-		mVoltage = null;
-		mCurrent = null;
-		mTemp = null;
-		mVoc = null;
-		mIsc = null;
 		mTime = time;
 	}
 
@@ -128,8 +109,6 @@ public class ModuleData
 		mVoltage = new ModuleDataEntry(voltage);
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
-		mVoc = null;
-		mIsc = null;
 		mTime = time;
 	}
 
@@ -139,7 +118,6 @@ public class ModuleData
 		mCurrent = new ModuleDataEntry(current);
 		mTemp = new ModuleDataEntry(temp);
 		mVoc = new ModuleDataEntry(voc);
-		mIsc = null;
 		mTime = time;
 	}
 
@@ -241,9 +219,9 @@ public class ModuleData
 		mTemp = new ModuleDataEntry(temp);
 	}
 
-	public ModuleDataEntry getVoc()
+	public double getVoc()
 	{
-		return mVoc;
+		return mVoc.get();
 	}
 
 	public void setVoc(double voc)
@@ -251,9 +229,9 @@ public class ModuleData
 		mVoc = new ModuleDataEntry(voc);
 	}
 
-	public ModuleDataEntry getIsc()
+	public double getIsc()
 	{
-		return mIsc;
+		return mIsc.get();
 	}
 
 	public void setIsc(double isc)
@@ -280,6 +258,111 @@ public class ModuleData
 		if (hasCurrent())   str += "current: " + getCurrent() + " ";
 		if (hasTemp())      str += "temperature: " + getTemp() + " ";
 		return str;
+	}
+
+	@Override
+	public ModuleData clone()
+	{
+		try
+		{
+			return (ModuleData) super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	@Override
+	public int compareTo(ModuleData md)
+	{
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+
+		if (this.equals(md)) return EQUAL;
+
+		// Compare times
+		if (this.getTime() < md.getTime()) return BEFORE;
+		if (this.getTime() > md.getTime()) return AFTER;
+
+		// Compare voltages
+		if (this.hasVoltage() && md.hasVoltage())
+		{
+			if (this.getVoltage() < md.getVoltage()) return BEFORE;
+			if (this.getVoltage() > md.getVoltage()) return AFTER;
+		}
+		else if (!this.hasVoltage() && md.hasVoltage())
+		{
+			return BEFORE;
+		}
+		else if (this.hasVoltage() && !md.hasVoltage())
+		{
+			return AFTER;
+		}
+
+		// Compare currents
+		if (this.hasCurrent() && md.hasCurrent())
+		{
+			if (this.getCurrent() < md.getCurrent()) return BEFORE;
+			if (this.getCurrent() > md.getCurrent()) return AFTER;
+		}
+		else if (!this.hasCurrent() && md.hasCurrent())
+		{
+			return BEFORE;
+		}
+		else if (this.hasCurrent() && !md.hasCurrent())
+		{
+			return AFTER;
+		}
+
+		// Compare temperature
+		if (this.hasTemp() && md.hasTemp())
+		{
+			if (this.getTemp() < md.getTemp()) return BEFORE;
+			if (this.getTemp() > md.getTemp()) return AFTER;
+		}
+		else if (!this.hasTemp() && md.hasTemp())
+		{
+			return BEFORE;
+		}
+		else if (this.hasTemp() && !md.hasTemp())
+		{
+			return AFTER;
+		}
+
+		// Compare Voc
+		if (this.hasVoc() && md.hasVoc())
+		{
+			if (this.getVoc() < md.getVoc()) return BEFORE;
+			if (this.getVoc() > md.getVoc()) return AFTER;
+		}
+		else if (!this.hasVoc() && md.hasVoc())
+		{
+			return BEFORE;
+		}
+		else if (this.hasVoc() && !md.hasVoc())
+		{
+			return AFTER;
+		}
+
+		// Compare Isc
+		if (this.hasIsc() && md.hasIsc())
+		{
+			if (this.getIsc() < md.getIsc()) return BEFORE;
+			if (this.getIsc() > md.getIsc()) return AFTER;
+		}
+		else if (!this.hasIsc() && md.hasIsc())
+		{
+			return BEFORE;
+		}
+		else if (this.hasIsc() && !md.hasIsc())
+		{
+			return AFTER;
+		}
+
+		return EQUAL;
 	}
 }
 
