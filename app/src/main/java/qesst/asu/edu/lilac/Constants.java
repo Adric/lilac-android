@@ -22,6 +22,7 @@ public interface Constants
 
     // SPP UUID service
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    public static final String BT_MAC_ADDRESS = "30:14:09:03:01:86";
     // Default bluetooth device name. Should be "DogBlue" but use all lowercase just in, well... case
     public static final String BT_DEVICE_NAME = "dogblue";
     // Passed to startActivityForResult(). Must be >= 0

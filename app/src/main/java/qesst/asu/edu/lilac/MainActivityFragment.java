@@ -92,7 +92,6 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 
 	public MainActivityFragment()
 	{
-		mBluetooth = new BluetoothActivity(this);
 		mFilenames = new ArrayList<String>();
 		mDataSet = new ModuleDataSet();
 		mCallCount = 0;
@@ -119,6 +118,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		mPreferences = //getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 						PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
 
+
+		mBluetooth = new BluetoothActivity(this, mPreferences);
 
 		//mPreferences.edit().clear().commit();
 		//getActivity().getBaseContext().getSharedPreferences("preferences", 0).edit().clear().commit();

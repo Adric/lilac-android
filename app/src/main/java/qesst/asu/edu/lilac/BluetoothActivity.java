@@ -8,7 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -30,9 +32,9 @@ public class BluetoothActivity extends Activity
 	private Fragment mParentFragment = null;
 
 	// MAC-address of Bluetooth module (default)
-	private String mAddress = "30:14:09:03:01:86";
+	private String mAddress = Constants.BT_MAC_ADDRESS;
 	// Device name
-	private String mDeviceName = Constants.DEVICE_NAME;
+	private String mDeviceName = Constants.BT_DEVICE_NAME;
 	// Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Bluetooth socket
@@ -45,14 +47,58 @@ public class BluetoothActivity extends Activity
 	// Threaded message system
 	private MessageSystem mMessageSystem = null;
 
-	public BluetoothActivity(Activity activity)
+	// Prefs
+	SharedPreferences mSharedPreferences;
+
+	public BluetoothActivity(Activity activity, SharedPreferences sharedPreferences)
 	{
 		mParentActivity = activity;
+		mSharedPreferences = sharedPreferences;
 	}
 
-	public BluetoothActivity(Fragment fragment)
+	public BluetoothActivity(Fragment fragment, SharedPreferences sharedPreferences)
 	{
 		mParentFragment = fragment;
+		mSharedPreferences = sharedPreferences;
+	}
+
+	private void initPrefs()
+	{
+		if (mSharedPreferences.getBoolean("pref_key_custom_name_check", false))
+		{
+			String name = mSharedPreferences.getString("pref_key_custom_name_string", "");
+			if (!name.isEmpty())
+			{
+				mDeviceName = name;
+				Log.d(TAG, "New device name: " + name);
+			}
+			else
+			{
+				mDeviceName = Constants.BT_DEVICE_NAME;
+			}
+		}
+		else
+		{
+			mDeviceName = Constants.BT_DEVICE_NAME;
+		}
+
+		if (mSharedPreferences.getBoolean("pref_key_custom_mac_check", false))
+		{
+			String mac = mSharedPreferences.getString("pref_key_custom_mac_string", "");
+			if (!mac.isEmpty())
+			{
+				mAddress = mac;
+				Log.d(TAG, "New mac address: " + mac);
+			}
+			else
+			{
+				mAddress = Constants.BT_MAC_ADDRESS;
+			}
+		}
+		else
+		{
+			mAddress = Constants.BT_MAC_ADDRESS;
+		}
 	}
 
 	/*
@@ -61,6 +107,7 @@ public class BluetoothActivity extends Activity
 	public void connect()
 	{
 		Log.d(TAG, "connect");
+		initPrefs();
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();		// get Bluetooth adapter
 		if (mBluetoothAdapter == null)
 		{
@@ -90,8 +137,7 @@ public class BluetoothActivity extends Activity
 		}
 
 		/*
-		Block the main thread until a connection is established
-		TODO: move into its own thread
+		Block the thread until a connection is established
 		 */
 	}
 
@@ -102,7 +148,6 @@ public class BluetoothActivity extends Activity
 		// Bluetooth socket
 		try
 		{
-
 			mBluetoothSocket.close();
 			mBluetoothSocket = null;
 		}
@@ -204,15 +249,14 @@ public class BluetoothActivity extends Activity
 				mArrayAdapter.add(device.getName() + "\n" + mac_address[0]);
 
 				// if the name matches the one we're looking for, store the mac address
-				// TODO: set default name in preferences
-				if (device.getName().toLowerCase().contains(mDeviceName))
+				if (device.getName().toLowerCase().contains(mDeviceName.toLowerCase()))
 				{
-					Log.e(TAG, mDeviceName + ", address: " + mac_address[0]);
+					Log.d(TAG, mDeviceName + " found, address: " + mac_address[0]);
 				}
 				else
 				{
 					// List other known devices
-					Log.d(TAG, "Device: " + device.getName() + ", address: " + mac_address[0]);
+					Log.d(TAG, "Device: " + device.getName() + " also exists, address: " + mac_address[0]);
 				}
 			}
 		}
@@ -239,14 +283,14 @@ public class BluetoothActivity extends Activity
 						// Add the name and address to an array adapter to show in a ListView
 						mArrayAdapter.add(device.getName() + "\n" + mac_address[0]);
 
-						if (device.getName().toLowerCase().contains(mDeviceName))
+						if (device.getName().toLowerCase().contains(mDeviceName.toLowerCase()))
 						{
-							Log.e(TAG, mDeviceName + ", address: " + mac_address[0]);
+							Log.e(TAG, mDeviceName + " found, address: " + mac_address[0]);
 						}
 						else
 						{
 							// List other known devices
-							Log.d(TAG, "Device: " + device.getName() + ", address: " + mac_address[0]);
+							Log.d(TAG, "Device: " + device.getName() + " also exists, address: " + mac_address[0]);
 						}
 					}
 				}
@@ -260,7 +304,6 @@ public class BluetoothActivity extends Activity
 		if (mac_address[0] == null)
 		{
 			// use the default
-			// TODO: set in the preferences
 			Log.e(TAG, "Device address not found, using default: " + mAddress);
 			mac_address[0] = mAddress;
 		}
