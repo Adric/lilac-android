@@ -236,36 +236,11 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 			{
 				if (!mMeasuring)
 				{
-					// Generate a new filename for this data
-					SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
-					mFilenameBase = "IV-data-" + df.format(new Date());
-					
-					mMeasuring = true;
-					if (mFlags.contains(EFlag.CONTINUOUS)) 
-					{
-						btnMeasure.setText(getResources().getString(R.string.end_measurement));	
-					}
-					mFlags.add(EFlag.RUN);
-					mBluetooth.write(EFlag.toJsonString(mFlags));
+					startMeasurement();
 				}
 				else
 				{
-					mMeasuring = false;
-					if (mFlags.contains(EFlag.CONTINUOUS))
-					{
-						btnMeasure.setText(getResources().getString(R.string.begin_measurement));
-					}
-					mFlags.remove(EFlag.RUN);
-					mBluetooth.write(EFlag.toJsonString(mFlags));
-
-					// Make sure all our UI data buttons are enabled
-					toggleBTUI(!mDataSet.isEmpty());
-
-					if (mPreferences.getBoolean("pref_key_auto_save_files_check", false))
-					{
-						saveFile();
-						saveImage();
-					}
+					stopMeasurement();
 				}
 			}
 		});
@@ -315,7 +290,8 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		});
 
 		// Create the chart
-		mGraph = new GraphView((LineChart) view.findViewById(R.id.iv_curve), view);
+		mGraph = new GraphView((LineChart) view.findViewById(R.id.iv_curve), view, this);
+		mGraph.setIsSweep(mFlags.contains(EFlag.SWEEP));
 
 		// We have menu options
 		setHasOptionsMenu(true);
@@ -876,6 +852,41 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		if (lblIsc != null) lblIsc.setText("Isc: ");
 		if (mGraph != null) mGraph.reset();
 		if (mDataSet != null) mDataSet.clear();
+	}
+
+	public void startMeasurement()
+	{
+		// Generate a new filename for this data
+		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
+		mFilenameBase = "IV-data-" + df.format(new Date());
+
+		mMeasuring = true;
+		if (mFlags.contains(EFlag.CONTINUOUS))
+		{
+			btnMeasure.setText(getResources().getString(R.string.end_measurement));
+		}
+		mFlags.add(EFlag.RUN);
+		mBluetooth.write(EFlag.toJsonString(mFlags));
+	}
+
+	public void stopMeasurement()
+	{
+		mMeasuring = false;
+		if (mFlags.contains(EFlag.CONTINUOUS))
+		{
+			btnMeasure.setText(getResources().getString(R.string.begin_measurement));
+		}
+		mFlags.remove(EFlag.RUN);
+		mBluetooth.write(EFlag.toJsonString(mFlags));
+
+		// Make sure all our UI data buttons are enabled
+		toggleBTUI(!mDataSet.isEmpty());
+
+		if (mPreferences.getBoolean("pref_key_auto_save_files_check", false))
+		{
+			saveFile();
+			saveImage();
+		}
 	}
 }
 

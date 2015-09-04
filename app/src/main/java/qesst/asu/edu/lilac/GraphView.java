@@ -1,6 +1,8 @@
 package qesst.asu.edu.lilac;
 
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -44,13 +46,20 @@ public class GraphView
 
 	// We only care about line charts
 	private LineChart mChart;
+
+	private Fragment mParent;
+
+	boolean mEndMeasurement;
+
+	boolean mIsSweep;
 	
 	private final String TAG = "GraphView";
 	
-	public GraphView(LineChart chart, View view)
+	public GraphView(LineChart chart, View view, Fragment parent)
 	{
 		mChart = chart;
 		mView = view;
+		mParent = parent;
 
 		init();
 	}
@@ -67,6 +76,8 @@ public class GraphView
 			Log.d(TAG, "Failed to initialize graph!");
 			return;
 		}
+
+		mEndMeasurement = false;
 
 		// Set the labels
 		mChart.setDescription("");
@@ -130,18 +141,19 @@ public class GraphView
 			}
 
 			// If current drops below 0, stop and return
-			/*if (md.getCurrent() <= 0.f)
+			if (mIsSweep && md.getCurrent() <= 0.001f)
 			{
 				if (!mEndMeasurement)
 				{
 					Log.e(TAG, "Trying to add negative current to graph: " + md.getCurrent() + ", sending 'E' back to Arduino and skipping");
 					//mMessageSystem.write('C');
 
-					mMessageSystem.write('E');
+					// TODO: refactor this hack!
+					((MainActivityFragment)mParent).stopMeasurement();
 					mEndMeasurement = true;
 				}
 				return;
-			}*/
+			}
 
 
 			// create formatter for appropriate x labels
@@ -202,5 +214,15 @@ public class GraphView
 	{
 		init();
 		mChart.invalidate();
+	}
+
+	public boolean isSweep()
+	{
+		return mIsSweep;
+	}
+
+	public void setIsSweep(boolean isSweep)
+	{
+		this.mIsSweep = isSweep;
 	}
 }
