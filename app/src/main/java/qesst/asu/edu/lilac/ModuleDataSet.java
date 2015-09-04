@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Data set for storing module data entries
  */
 public class ModuleDataSet
-{;
+{
 	private ArrayList<ModuleData> mModuleData = new ArrayList<ModuleData>();
 
 	public ModuleDataSet()
@@ -341,6 +341,8 @@ public class ModuleDataSet
 		boolean has_voltage = false;
 		boolean has_current = false;
 		boolean has_temp = false;
+		boolean has_voc = false;
+		boolean has_isc = false;
 		for (ModuleData entry : mModuleData)
 		{
 			String str = "";
@@ -369,6 +371,18 @@ public class ModuleDataSet
 			{
 				str += Double.toString(entry.getTemp());
 				has_temp = true;
+			}
+
+			if (entry.hasVoc())
+			{
+				str += Double.toString(entry.getVoc());
+				has_voc = true;
+			}
+
+			if (entry.hasIsc())
+			{
+				str += Double.toString(entry.getIsc());
+				has_isc = true;
 			}
 
 			if (str.charAt(0) == data_separator.get().charAt(0))
@@ -400,6 +414,14 @@ public class ModuleDataSet
 		if (has_temp)
 		{
 			header += "TEMPERATURE" + data_separator.get();
+		}
+		if (has_voc)
+		{
+			header += "VOC" + data_separator.get();
+		}
+		if (has_isc)
+		{
+			header += "ISC" + data_separator.get();
 		}
 		if (!header.isEmpty() &&
 		    header.charAt(header.length()-1) == data_separator.get().charAt(0))
