@@ -126,39 +126,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		// Set up the flags
 
 
-		Set<String> prefFlags = mPreferences.getStringSet("pref_key_flag_list", null);
-		if (prefFlags != null)
-		{
-			if (!prefFlags.isEmpty())
-			{
-				/*
-					These are the values in arrays.xml
-				 */
-				for (String s : prefFlags)
-				{
-					Log.d(TAG, "Found pref flag: " + s);
-					EFlag flag = EFlag.fromChar(s.charAt(0));
-					if (flag != EFlag.NONE)
-					{
-						Log.d(TAG, "Adding pref flag: " + flag.toString());
-						mFlags.add(flag);
-					}
-				}
-			}
-			else
-			{
-				Log.e(TAG, "pref flag is empty!");
-			}
-		}
-		else
-		{
-			Log.e(TAG, "pref flag is null! Using hardcoded defaults");
-			mFlags.add(EFlag.CONTINUOUS);
-			mFlags.add(EFlag.VOLTAGE);
-			mFlags.add(EFlag.CURRENT);
-			mFlags.add(EFlag.AVERAGE);
-			mFlags.add(EFlag.SWEEP);
-		}
+		initFlags();
 
 
 		// Set up the UI
@@ -298,6 +266,58 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		setHasOptionsMenu(true);
 
 		return view;
+	}
+
+	@Override
+	public void setMenuVisibility(final boolean visible)
+	{
+		// TODO: move this into super.onResume(); when it's no longer a fragment
+		if (visible)
+		{
+			// Menu options may have changed if reset prefs
+			initFlags();
+			getActivity().invalidateOptionsMenu();
+		}
+
+		super.setMenuVisibility(visible);
+	}
+
+	public void initFlags()
+	{
+		mFlags.clear();
+		Set<String> prefFlags = mPreferences.getStringSet("pref_key_flag_list", null);
+		if (prefFlags != null)
+		{
+			if (!prefFlags.isEmpty())
+			{
+				/*
+					These are the values in arrays.xml
+				 */
+				for (String s : prefFlags)
+				{
+					Log.d(TAG, "Found pref flag: " + s);
+					EFlag flag = EFlag.fromChar(s.charAt(0));
+					if (flag != EFlag.NONE)
+					{
+						Log.d(TAG, "Adding pref flag: " + flag.toString());
+						mFlags.add(flag);
+					}
+				}
+			}
+			else
+			{
+				Log.e(TAG, "pref flag is empty!");
+			}
+		}
+		else
+		{
+			Log.e(TAG, "pref flag is null! Using hardcoded defaults");
+			mFlags.add(EFlag.CONTINUOUS);
+			mFlags.add(EFlag.VOLTAGE);
+			mFlags.add(EFlag.CURRENT);
+			mFlags.add(EFlag.AVERAGE);
+			mFlags.add(EFlag.SWEEP);
+		}
 	}
 
 	public File getStorageDir(String filename)
