@@ -47,6 +47,8 @@
 	<string name="pref_measurement_title">Measurements</string>
 	<string name="pref_flag_title">Default Measurements</string>
 	<string name="pref_flag_summary">Set the quantities to measure by default</string>
+	<string name="pref_negative_current_check">Graph Negative Currents</string>
+	<string name="pref_negative_current_summary">Allow negative currents to be added to the graph</string>
 
 	<string name="pref_general">General</string>
 	<string name="pref_reset_title">Reset</string>

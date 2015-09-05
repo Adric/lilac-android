@@ -276,6 +276,7 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		{
 			// Menu options may have changed if reset prefs
 			initFlags();
+			mGraph.setIsSweep(mFlags.contains(EFlag.SWEEP));
 			getActivity().invalidateOptionsMenu();
 		}
 
@@ -454,6 +455,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 				return true;
 			}
 		}
+
+		mGraph.setIsSweep(mFlags.contains(EFlag.SWEEP));
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -880,6 +884,9 @@ public class MainActivityFragment extends Fragment implements IMessageCallback
 		// Generate a new filename for this data
 		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy_HHmmss", Locale.getDefault());
 		mFilenameBase = "IV-data-" + df.format(new Date());
+
+		mGraph.resetEndMeasurement(); // resets the flag that triggers from current stop
+		mGraph.setAllowNegativeCurrents(mPreferences.getBoolean("pref_key_negative_current_check", false));
 
 		mMeasuring = true;
 		if (mFlags.contains(EFlag.CONTINUOUS))

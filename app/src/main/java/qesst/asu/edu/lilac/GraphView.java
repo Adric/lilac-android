@@ -52,14 +52,18 @@ public class GraphView
 	boolean mEndMeasurement;
 
 	boolean mIsSweep;
+
+	boolean mAllowNegativeCurrents;
 	
 	private final String TAG = "GraphView";
-	
+
 	public GraphView(LineChart chart, View view, Fragment parent)
 	{
 		mChart = chart;
 		mView = view;
 		mParent = parent;
+
+		mAllowNegativeCurrents = false;
 
 		init();
 	}
@@ -122,6 +126,12 @@ public class GraphView
 			init();
 		}
 
+		if (mEndMeasurement)
+		{
+			Log.d(TAG, "mEndMeasurement == true");
+			return;
+		}
+
 		LineData data = mChart.getData();
 		//data.setValueTextColor(Color.BLUE);
 		//data.setValueTextSize(8.f);
@@ -141,15 +151,15 @@ public class GraphView
 			}
 
 			// If current drops below 0, stop and return
-			if (mIsSweep && md.getCurrent() <= 0.001f)
+			if (!mAllowNegativeCurrents && mIsSweep && (md.getCurrent() <= 0.001f))
 			{
 				if (!mEndMeasurement)
 				{
-					Log.e(TAG, "Trying to add negative current to graph: " + md.getCurrent() + ", sending 'E' back to Arduino and skipping");
+					Log.e(TAG, "Trying to add negative current to graph: " + md.getCurrent() + ", stopping measurement and skipping");
 					//mMessageSystem.write('C');
 
 					// TODO: refactor this hack!
-					((MainActivityFragment)mParent).stopMeasurement();
+					((MainActivityFragment) mParent).stopMeasurement();
 					mEndMeasurement = true;
 				}
 				return;
@@ -224,5 +234,20 @@ public class GraphView
 	public void setIsSweep(boolean isSweep)
 	{
 		this.mIsSweep = isSweep;
+	}
+
+	public void resetEndMeasurement()
+	{
+		mEndMeasurement = false;
+	}
+
+	public boolean getAllowNegativeCurrents()
+	{
+		return mAllowNegativeCurrents;
+	}
+
+	public void setAllowNegativeCurrents(boolean allowNegativeCurrents)
+	{
+		mAllowNegativeCurrents = allowNegativeCurrents;
 	}
 }

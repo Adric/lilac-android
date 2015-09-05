@@ -62,6 +62,11 @@
 			android:entryValues="@array/pref_flag_values"
 			android:defaultValue="@array/pref_flag_values_default">
 		</MultiSelectListPreference>
+		<CheckBoxPreference
+			android:key="pref_key_negative_current_check"
+			android:title="@string/pref_negative_current_check"
+			android:summary="@string/pref_negative_current_summary"
+			android:defaultValue="false" />
 	</PreferenceCategory>
 	<PreferenceCategory
 		android:title="@string/pref_general"
