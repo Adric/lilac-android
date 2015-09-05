@@ -79,7 +79,7 @@
 		style="?android:attr/buttonStyleSmall"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="CLR"
+		android:text="@string/reset"
 		android:id="@+id/btn_clear"
 		android:layout_alignBottom="@+id/iv_curve"
 		android:layout_alignEnd="@+id/iv_curve"/>

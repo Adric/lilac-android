@@ -2,6 +2,7 @@
 	<string name="app_name">Lilac</string>
 	<string name="connect">Connect</string>
 	<string name="disconnect">Disconnect</string>
+	<string name="reset">Reset</string>
 	<string name="sweep">Sweep</string>
 	<string name="voltage">Voltage</string>
 	<string name="current">Current</string>
