@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -113,8 +114,11 @@ public class BluetoothActivity extends Activity
 		{
 			// Device does not support Bluetooth
 			// TODO: causes crash because not called in onCreate so Context doesn't exist yet
-			Log.e(TAG, mParentActivity.getBaseContext().getString(R.string.bluetooth_not_supported));
-			Toast.makeText(mParentActivity.getBaseContext(), getString(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
+			// Resources.getSystem().getString doesn't work
+			// mParentActivity.getBaseContext().getString doesn't work
+			// getApplicationContext().getString doesn't work
+			Log.e(TAG, Lilac.getStringGlobal(R.string.bluetooth_not_supported));
+			Toast.makeText(mParentActivity.getBaseContext(), Lilac.getStringGlobal(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
 			return;
 		}
 
