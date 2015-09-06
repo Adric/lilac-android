@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 /**
- * Global application context for managing state and string resources
+ * Global application context for managing state and string resources.
+ *
+ * This feels dirty, but avoids a ton of ugly code later
  */
 public class Lilac extends Application
 {
@@ -23,6 +25,10 @@ public class Lilac extends Application
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 	}
 
+	/**
+	 * Returns a reference to a global application context when needed
+	 * @return
+	 */
 	public static Context getContext()
 	{
 		return mContext;
@@ -42,6 +48,10 @@ public class Lilac extends Application
 		return mContext.getString(resId);
 	}
 
+	/**
+	 * Returns a reference to the global preferences object
+	 * @return
+	 */
 	public static SharedPreferences getPreferences()
 	{
 		return mPreferences;
