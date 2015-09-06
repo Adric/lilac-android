@@ -1,5 +1,6 @@
 package qesst.asu.edu.lilac;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -47,7 +48,7 @@ public class GraphView
 	// We only care about line charts
 	private LineChart mChart;
 
-	private Fragment mParent;
+	private Activity mParent;
 
 	boolean mEndMeasurement;
 
@@ -57,7 +58,7 @@ public class GraphView
 	
 	private final String TAG = "GraphView";
 
-	public GraphView(LineChart chart, View view, Fragment parent)
+	public GraphView(LineChart chart, View view, Activity parent)
 	{
 		mChart = chart;
 		mView = view;
@@ -159,7 +160,7 @@ public class GraphView
 					//mMessageSystem.write('C');
 
 					// TODO: refactor this hack!
-					((MainActivityFragment) mParent).stopMeasurement();
+					((MainActivity) mParent).stopMeasurement();
 					mEndMeasurement = true;
 				}
 				return;

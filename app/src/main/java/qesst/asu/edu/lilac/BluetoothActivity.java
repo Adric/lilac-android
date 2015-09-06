@@ -112,8 +112,9 @@ public class BluetoothActivity extends Activity
 		if (mBluetoothAdapter == null)
 		{
 			// Device does not support Bluetooth
-			Log.e(TAG, getString(R.string.bluetooth_not_supported));
-			Toast.makeText(getBaseContext(), getString(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
+			// TODO: causes crash because not called in onCreate so Context doesn't exist yet
+			Log.e(TAG, mParentActivity.getBaseContext().getString(R.string.bluetooth_not_supported));
+			Toast.makeText(mParentActivity.getBaseContext(), getString(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
 			return;
 		}
 
