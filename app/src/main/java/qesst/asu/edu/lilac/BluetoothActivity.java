@@ -113,10 +113,6 @@ public class BluetoothActivity extends Activity
 		if (mBluetoothAdapter == null)
 		{
 			// Device does not support Bluetooth
-			// TODO: causes crash because not called in onCreate so Context doesn't exist yet
-			// Resources.getSystem().getString doesn't work
-			// mParentActivity.getBaseContext().getString doesn't work
-			// getApplicationContext().getString doesn't work
 			Log.e(TAG, Lilac.getStringGlobal(R.string.bluetooth_not_supported));
 			Toast.makeText(mParentActivity.getBaseContext(), Lilac.getStringGlobal(R.string.bluetooth_not_supported), Toast.LENGTH_LONG).show();
 			return;
