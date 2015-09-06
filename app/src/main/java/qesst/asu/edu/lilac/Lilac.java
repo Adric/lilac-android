@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 /**
  * Global application context for managing state and string resources.
  *
- * This feels dirty, but avoids a ton of ugly code later
+ * This feels dirty, but avoids a ton of ugliness later
  */
 public class Lilac extends Application
 {
