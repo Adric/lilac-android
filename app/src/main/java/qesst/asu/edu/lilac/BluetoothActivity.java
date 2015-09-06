@@ -323,8 +323,8 @@ public class BluetoothActivity extends Activity
 		}
 		catch (IOException ioe)
 		{
-			Log.e(TAG, getString(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage());
-			Toast.makeText(getBaseContext(), getString(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+			Log.e(TAG, Lilac.getStringGlobal(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage());
+			Toast.makeText(getBaseContext(), Lilac.getStringGlobal(R.string.bluetooth_rf_comm_create_failed) + ": " + ioe.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
 			// If unable to create an RFComm socket, try the more generic way
 			try
@@ -333,8 +333,8 @@ public class BluetoothActivity extends Activity
 			}
 			catch (IOException ioe2)
 			{
-				Log.e(TAG, getString(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage());
-				Toast.makeText(getBaseContext(), getString(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+				Log.e(TAG, Lilac.getStringGlobal(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage());
+				Toast.makeText(getBaseContext(), Lilac.getStringGlobal(R.string.bluetooth_socket_create_failed) + ": " + ioe2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -360,8 +360,8 @@ public class BluetoothActivity extends Activity
 			}
 			catch (IOException e2)
 			{
-				Log.e(TAG, getString(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage());
-				Toast.makeText(getBaseContext(), getString(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+				Log.e(TAG, Lilac.getStringGlobal(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage());
+				Toast.makeText(getBaseContext(), Lilac.getStringGlobal(R.string.bluetooth_socket_close_failed) + ": " + e2.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 			}
 		}
 

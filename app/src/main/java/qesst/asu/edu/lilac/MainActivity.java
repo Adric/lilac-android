@@ -107,7 +107,8 @@ public class MainActivity extends Activity implements IMessageCallback //extends
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		mPreferences = //this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-			PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+						//PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        Lilac.getPreferences();
 
 		mBluetooth = new BluetoothActivity(this, mPreferences);
 

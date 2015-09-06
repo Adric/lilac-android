@@ -39,7 +39,8 @@ public class SettingsActivity extends PreferenceActivity
 			addPreferencesFromResource(R.xml.preferences);
 
 			// Change the summary text to any saved values if we have them
-			final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+			//final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+			final SharedPreferences sharedPreferences = Lilac.getPreferences();
 			onSharedPreferenceChanged(sharedPreferences, PREF_NAME);
 			onSharedPreferenceChanged(sharedPreferences, PREF_MAC);
 
